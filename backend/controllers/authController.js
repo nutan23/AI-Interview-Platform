@@ -597,7 +597,7 @@ exports.forgotPassword = (
 
                     // ==================================================
                     // RESET PASSWORD URL
-                    // Works on Render and local environment
+                    // Production + Local
                     // ==================================================
 
                     const baseUrl =
@@ -632,28 +632,34 @@ exports.forgotPassword = (
                                 margin: auto;
                                 padding: 25px;
                                 background: #ffffff;
+                                border: 1px solid #e5e7eb;
                                 border-radius: 12px;
                             ">
 
                                 <h2 style="
                                     color: #4338ca;
+                                    margin-bottom: 20px;
                                 ">
                                     Password Reset Request
                                 </h2>
 
+
                                 <p>
                                     Hello ${user.name},
                                 </p>
+
 
                                 <p>
                                     We received a request to reset
                                     your AI Interview Platform password.
                                 </p>
 
+
                                 <p>
                                     Click the button below to create
                                     a new password:
                                 </p>
+
 
                                 <p style="
                                     margin-top: 25px;
@@ -664,9 +670,9 @@ exports.forgotPassword = (
                                         href="${resetUrl}"
                                         style="
                                             display: inline-block;
-                                            padding: 12px 20px;
+                                            padding: 12px 22px;
                                             background: #4338ca;
-                                            color: white;
+                                            color: #ffffff;
                                             text-decoration: none;
                                             border-radius: 6px;
                                             font-weight: bold;
@@ -677,15 +683,18 @@ exports.forgotPassword = (
 
                                 </p>
 
+
                                 <p>
                                     This link will expire in
                                     <strong>15 minutes</strong>.
                                 </p>
 
+
                                 <p>
                                     If you did not request this,
                                     you can safely ignore this email.
                                 </p>
+
 
                                 <hr
                                     style="
@@ -694,6 +703,7 @@ exports.forgotPassword = (
                                         margin-top: 25px;
                                     "
                                 >
+
 
                                 <p style="
                                     font-size: 12px;
@@ -711,7 +721,11 @@ exports.forgotPassword = (
 
                     try {
 
-                        // Send email
+                        // ==================================================
+                        // SEND EMAIL
+                        // config/email.js internally uses Brevo HTTPS API
+                        // ==================================================
+
                         await transporter.sendMail(
                             mailOptions
                         );
