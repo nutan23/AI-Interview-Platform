@@ -13,11 +13,19 @@ exports.register = async (req, res) => {
 
     try {
 
-        const { name, email, password } = req.body;
+        const {
+            name,
+            email,
+            password
+        } = req.body;
 
 
         // Basic validation
-        if (!name || !email || !password) {
+        if (
+            !name ||
+            !email ||
+            !password
+        ) {
 
             return res.redirect(
                 "/register?error=Please fill all fields"
@@ -27,7 +35,9 @@ exports.register = async (req, res) => {
 
 
         // Password length validation
-        if (password.length < 6) {
+        if (
+            password.length < 6
+        ) {
 
             return res.redirect(
                 "/register?error=Password must be at least 6 characters"
@@ -37,8 +47,14 @@ exports.register = async (req, res) => {
 
 
         // Clean input
-        const cleanName = name.trim();
-        const cleanEmail = email.trim().toLowerCase();
+        const cleanName =
+            name.trim();
+
+
+        const cleanEmail =
+            email
+                .trim()
+                .toLowerCase();
 
 
         // Check whether email already exists
@@ -51,15 +67,20 @@ exports.register = async (req, res) => {
 
         db.query(
             checkSql,
-            [cleanEmail],
+            [
+                cleanEmail
+            ],
             async (err, results) => {
 
-                if (err) {
+                if (
+                    err
+                ) {
 
                     console.error(
                         "Database error:",
                         err
                     );
+
 
                     return res.redirect(
                         "/register?error=Database error occurred"
@@ -69,7 +90,9 @@ exports.register = async (req, res) => {
 
 
                 // Email already registered
-                if (results.length > 0) {
+                if (
+                    results.length > 0
+                ) {
 
                     return res.redirect(
                         "/register?error=Email already registered"
@@ -82,13 +105,20 @@ exports.register = async (req, res) => {
 
                     // Hash password
                     const hashedPassword =
-                        await bcrypt.hash(password, 10);
+                        await bcrypt.hash(
+                            password,
+                            10
+                        );
 
 
                     // Insert user
                     const insertSql = `
                         INSERT INTO users
-                        (name, email, password)
+                        (
+                            name,
+                            email,
+                            password
+                        )
                         VALUES (?, ?, ?)
                     `;
 
@@ -102,12 +132,15 @@ exports.register = async (req, res) => {
                         ],
                         (err, result) => {
 
-                            if (err) {
+                            if (
+                                err
+                            ) {
 
                                 console.error(
                                     "Registration error:",
                                     err
                                 );
+
 
                                 return res.redirect(
                                     "/register?error=Registration failed"
@@ -122,19 +155,22 @@ exports.register = async (req, res) => {
                             );
 
 
-                            res.redirect(
+                            return res.redirect(
                                 "/login?success=Registration successful"
                             );
 
                         }
                     );
 
-                } catch (error) {
+                }
+
+                catch (error) {
 
                     console.error(
                         "Password hashing error:",
                         error
                     );
+
 
                     return res.redirect(
                         "/register?error=Registration failed"
@@ -145,14 +181,17 @@ exports.register = async (req, res) => {
             }
         );
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(
             "Register error:",
             error
         );
 
-        res.redirect(
+
+        return res.redirect(
             "/register?error=Something went wrong"
         );
 
@@ -166,13 +205,22 @@ exports.register = async (req, res) => {
 // LOGIN USER
 // ======================================================
 
-exports.login = (req, res) => {
+exports.login = (
+    req,
+    res
+) => {
 
-    const { email, password } = req.body;
+    const {
+        email,
+        password
+    } = req.body;
 
 
     // Basic validation
-    if (!email || !password) {
+    if (
+        !email ||
+        !password
+    ) {
 
         return res.redirect(
             "/login?error=Please enter email and password"
@@ -182,11 +230,18 @@ exports.login = (req, res) => {
 
 
     // Clean email
-    const cleanEmail = email.trim().toLowerCase();
+    const cleanEmail =
+        email
+            .trim()
+            .toLowerCase();
 
 
     const sql = `
-        SELECT id, name, email, password
+        SELECT
+            id,
+            name,
+            email,
+            password
         FROM users
         WHERE email = ?
     `;
@@ -194,15 +249,20 @@ exports.login = (req, res) => {
 
     db.query(
         sql,
-        [cleanEmail],
+        [
+            cleanEmail
+        ],
         async (err, results) => {
 
-            if (err) {
+            if (
+                err
+            ) {
 
                 console.error(
                     "Login database error:",
                     err
                 );
+
 
                 return res.redirect(
                     "/login?error=Database error occurred"
@@ -212,7 +272,9 @@ exports.login = (req, res) => {
 
 
             // User not found
-            if (results.length === 0) {
+            if (
+                results.length === 0
+            ) {
 
                 return res.redirect(
                     "/login?error=Invalid email or password"
@@ -221,7 +283,8 @@ exports.login = (req, res) => {
             }
 
 
-            const user = results[0];
+            const user =
+                results[0];
 
 
             try {
@@ -234,7 +297,9 @@ exports.login = (req, res) => {
                     );
 
 
-                if (!passwordMatch) {
+                if (
+                    !passwordMatch
+                ) {
 
                     return res.redirect(
                         "/login?error=Invalid email or password"
@@ -246,11 +311,14 @@ exports.login = (req, res) => {
                 // Create session
                 req.session.user = {
 
-                    id: user.id,
+                    id:
+                        user.id,
 
-                    name: user.name,
+                    name:
+                        user.name,
 
-                    email: user.email
+                    email:
+                        user.email
 
                 };
 
@@ -261,16 +329,21 @@ exports.login = (req, res) => {
                 );
 
 
-                res.redirect("/dashboard");
+                return res.redirect(
+                    "/dashboard"
+                );
 
-            } catch (error) {
+            }
+
+            catch (error) {
 
                 console.error(
                     "Password comparison error:",
                     error
                 );
 
-                res.redirect(
+
+                return res.redirect(
                     "/login?error=Login failed"
                 );
 
@@ -287,25 +360,37 @@ exports.login = (req, res) => {
 // LOGOUT USER
 // ======================================================
 
-exports.logout = (req, res) => {
+exports.logout = (
+    req,
+    res
+) => {
 
-    req.session.destroy((err) => {
+    req.session.destroy(
+        (err) => {
 
-        if (err) {
-
-            console.error(
-                "Logout error:",
+            if (
                 err
+            ) {
+
+                console.error(
+                    "Logout error:",
+                    err
+                );
+
+
+                return res.redirect(
+                    "/dashboard"
+                );
+
+            }
+
+
+            return res.redirect(
+                "/login"
             );
 
-            return res.redirect("/dashboard");
-
         }
-
-
-        res.redirect("/login");
-
-    });
+    );
 
 };
 
@@ -315,15 +400,23 @@ exports.logout = (req, res) => {
 // SHOW FORGOT PASSWORD PAGE
 // ======================================================
 
-exports.showForgotPassword = (req, res) => {
+exports.showForgotPassword = (
+    req,
+    res
+) => {
 
-    res.render("forgotPassword", {
+    return res.render(
+        "forgotPassword",
+        {
 
-        error: null,
+            error:
+                null,
 
-        success: null
+            success:
+                null
 
-    });
+        }
+    );
 
 };
 
@@ -333,13 +426,20 @@ exports.showForgotPassword = (req, res) => {
 // FORGOT PASSWORD
 // ======================================================
 
-exports.forgotPassword = (req, res) => {
+exports.forgotPassword = (
+    req,
+    res
+) => {
 
-    const { email } = req.body;
+    const {
+        email
+    } = req.body;
 
 
     // Check email
-    if (!email) {
+    if (
+        !email
+    ) {
 
         return res.render(
             "forgotPassword",
@@ -348,7 +448,8 @@ exports.forgotPassword = (req, res) => {
                 error:
                     "Please enter your email address",
 
-                success: null
+                success:
+                    null
 
             }
         );
@@ -358,12 +459,17 @@ exports.forgotPassword = (req, res) => {
 
     // Clean email
     const cleanEmail =
-        email.trim().toLowerCase();
+        email
+            .trim()
+            .toLowerCase();
 
 
     // Find user
     const sql = `
-        SELECT id, name, email
+        SELECT
+            id,
+            name,
+            email
         FROM users
         WHERE email = ?
     `;
@@ -371,15 +477,20 @@ exports.forgotPassword = (req, res) => {
 
     db.query(
         sql,
-        [cleanEmail],
+        [
+            cleanEmail
+        ],
         (err, results) => {
 
-            if (err) {
+            if (
+                err
+            ) {
 
                 console.error(
                     "Forgot password database error:",
                     err
                 );
+
 
                 return res.render(
                     "forgotPassword",
@@ -388,7 +499,8 @@ exports.forgotPassword = (req, res) => {
                         error:
                             "Database error occurred",
 
-                        success: null
+                        success:
+                            null
 
                     }
                 );
@@ -397,7 +509,9 @@ exports.forgotPassword = (req, res) => {
 
 
             // Email doesn't exist
-            if (results.length === 0) {
+            if (
+                results.length === 0
+            ) {
 
                 return res.render(
                     "forgotPassword",
@@ -406,7 +520,8 @@ exports.forgotPassword = (req, res) => {
                         error:
                             "No account found with this email",
 
-                        success: null
+                        success:
+                            null
 
                     }
                 );
@@ -414,7 +529,8 @@ exports.forgotPassword = (req, res) => {
             }
 
 
-            const user = results[0];
+            const user =
+                results[0];
 
 
             // Generate secure random token
@@ -435,9 +551,11 @@ exports.forgotPassword = (req, res) => {
             // Save token
             const updateSql = `
                 UPDATE users
+
                 SET
                     reset_token = ?,
                     reset_token_expiry = ?
+
                 WHERE id = ?
             `;
 
@@ -451,12 +569,15 @@ exports.forgotPassword = (req, res) => {
                 ],
                 async (err) => {
 
-                    if (err) {
+                    if (
+                        err
+                    ) {
 
                         console.error(
                             "Reset token database error:",
                             err
                         );
+
 
                         return res.render(
                             "forgotPassword",
@@ -465,7 +586,8 @@ exports.forgotPassword = (req, res) => {
                                 error:
                                     "Could not create reset request",
 
-                                success: null
+                                success:
+                                    null
 
                             }
                         );
@@ -473,16 +595,28 @@ exports.forgotPassword = (req, res) => {
                     }
 
 
-                    // Reset password URL
+                    // ==================================================
+                    // RESET PASSWORD URL
+                    // Works on Render and local environment
+                    // ==================================================
+
+                    const baseUrl =
+                        process.env.APP_BASE_URL ||
+                        `http://localhost:${process.env.PORT || 3000}`;
+
+
                     const resetUrl =
-                        `http://localhost:3000/reset-password/${resetToken}`;
+                        `${baseUrl}/reset-password/${resetToken}`;
 
 
-                    // Email content
+                    // ==================================================
+                    // EMAIL CONTENT
+                    // ==================================================
+
                     const mailOptions = {
 
                         from:
-                            process.env.EMAIL_USER,
+                            `"AI Interview Platform" <${process.env.BREVO_SENDER_EMAIL}>`,
 
                         to:
                             user.email,
@@ -492,49 +626,83 @@ exports.forgotPassword = (req, res) => {
 
                         html: `
 
-                            <h2>Password Reset Request</h2>
+                            <div style="
+                                font-family: Arial, sans-serif;
+                                max-width: 600px;
+                                margin: auto;
+                                padding: 25px;
+                                background: #ffffff;
+                                border-radius: 12px;
+                            ">
 
-                            <p>
-                                Hello ${user.name},
-                            </p>
+                                <h2 style="
+                                    color: #4338ca;
+                                ">
+                                    Password Reset Request
+                                </h2>
 
-                            <p>
-                                We received a request to reset
-                                your AI Interview Platform password.
-                            </p>
+                                <p>
+                                    Hello ${user.name},
+                                </p>
 
-                            <p>
-                                Click the button below to create
-                                a new password:
-                            </p>
+                                <p>
+                                    We received a request to reset
+                                    your AI Interview Platform password.
+                                </p>
 
-                            <p>
+                                <p>
+                                    Click the button below to create
+                                    a new password:
+                                </p>
 
-                                <a
-                                    href="${resetUrl}"
+                                <p style="
+                                    margin-top: 25px;
+                                    margin-bottom: 25px;
+                                ">
+
+                                    <a
+                                        href="${resetUrl}"
+                                        style="
+                                            display: inline-block;
+                                            padding: 12px 20px;
+                                            background: #4338ca;
+                                            color: white;
+                                            text-decoration: none;
+                                            border-radius: 6px;
+                                            font-weight: bold;
+                                        "
+                                    >
+                                        Reset Password
+                                    </a>
+
+                                </p>
+
+                                <p>
+                                    This link will expire in
+                                    <strong>15 minutes</strong>.
+                                </p>
+
+                                <p>
+                                    If you did not request this,
+                                    you can safely ignore this email.
+                                </p>
+
+                                <hr
                                     style="
-                                        display:inline-block;
-                                        padding:12px 20px;
-                                        background:#4338ca;
-                                        color:white;
-                                        text-decoration:none;
-                                        border-radius:6px;
+                                        border: none;
+                                        border-top: 1px solid #e5e7eb;
+                                        margin-top: 25px;
                                     "
                                 >
-                                    Reset Password
-                                </a>
 
-                            </p>
+                                <p style="
+                                    font-size: 12px;
+                                    color: #6b7280;
+                                ">
+                                    AI Interview Preparation Platform
+                                </p>
 
-                            <p>
-                                This link will expire in
-                                <strong>15 minutes</strong>.
-                            </p>
-
-                            <p>
-                                If you did not request this,
-                                you can safely ignore this email.
-                            </p>
+                            </div>
 
                         `
 
@@ -559,7 +727,8 @@ exports.forgotPassword = (req, res) => {
                             "forgotPassword",
                             {
 
-                                error: null,
+                                error:
+                                    null,
 
                                 success:
                                     "Password reset link has been sent to your email."
@@ -567,8 +736,9 @@ exports.forgotPassword = (req, res) => {
                             }
                         );
 
+                    }
 
-                    } catch (emailError) {
+                    catch (emailError) {
 
                         console.error(
                             "Email sending error:",
@@ -583,7 +753,8 @@ exports.forgotPassword = (req, res) => {
                                 error:
                                     "Unable to send reset email. Please try again.",
 
-                                success: null
+                                success:
+                                    null
 
                             }
                         );
@@ -604,24 +775,33 @@ exports.forgotPassword = (req, res) => {
 // SHOW RESET PASSWORD PAGE
 // ======================================================
 
-exports.showResetPassword = (req, res) => {
+exports.showResetPassword = (
+    req,
+    res
+) => {
 
-    const { token } = req.params;
+    const {
+        token
+    } = req.params;
 
 
     // Token missing
-    if (!token) {
+    if (
+        !token
+    ) {
 
         return res.render(
             "resetPassword",
             {
 
-                token: null,
+                token:
+                    null,
 
                 error:
                     "Invalid password reset link",
 
-                success: null
+                success:
+                    null
 
             }
         );
@@ -632,7 +812,9 @@ exports.showResetPassword = (req, res) => {
     // Check token and expiry
     const sql = `
         SELECT id
+
         FROM users
+
         WHERE reset_token = ?
         AND reset_token_expiry > NOW()
     `;
@@ -640,10 +822,14 @@ exports.showResetPassword = (req, res) => {
 
     db.query(
         sql,
-        [token],
+        [
+            token
+        ],
         (err, results) => {
 
-            if (err) {
+            if (
+                err
+            ) {
 
                 console.error(
                     "Reset token validation error:",
@@ -655,12 +841,14 @@ exports.showResetPassword = (req, res) => {
                     "resetPassword",
                     {
 
-                        token: null,
+                        token:
+                            null,
 
                         error:
                             "Database error occurred",
 
-                        success: null
+                        success:
+                            null
 
                     }
                 );
@@ -669,18 +857,22 @@ exports.showResetPassword = (req, res) => {
 
 
             // Token invalid or expired
-            if (results.length === 0) {
+            if (
+                results.length === 0
+            ) {
 
                 return res.render(
                     "resetPassword",
                     {
 
-                        token: null,
+                        token:
+                            null,
 
                         error:
                             "This password reset link is invalid or has expired.",
 
-                        success: null
+                        success:
+                            null
 
                     }
                 );
@@ -689,15 +881,18 @@ exports.showResetPassword = (req, res) => {
 
 
             // Token valid
-            res.render(
+            return res.render(
                 "resetPassword",
                 {
 
-                    token: token,
+                    token:
+                        token,
 
-                    error: null,
+                    error:
+                        null,
 
-                    success: null
+                    success:
+                        null
 
                 }
             );
@@ -713,9 +908,15 @@ exports.showResetPassword = (req, res) => {
 // RESET PASSWORD
 // ======================================================
 
-exports.resetPassword = async (req, res) => {
+exports.resetPassword = async (
+    req,
+    res
+) => {
 
-    const { token } = req.params;
+    const {
+        token
+    } = req.params;
+
 
     const {
         password,
@@ -724,18 +925,23 @@ exports.resetPassword = async (req, res) => {
 
 
     // Check fields
-    if (!password || !confirmPassword) {
+    if (
+        !password ||
+        !confirmPassword
+    ) {
 
         return res.render(
             "resetPassword",
             {
 
-                token: token,
+                token:
+                    token,
 
                 error:
                     "Please fill all fields",
 
-                success: null
+                success:
+                    null
 
             }
         );
@@ -744,18 +950,22 @@ exports.resetPassword = async (req, res) => {
 
 
     // Check password length
-    if (password.length < 6) {
+    if (
+        password.length < 6
+    ) {
 
         return res.render(
             "resetPassword",
             {
 
-                token: token,
+                token:
+                    token,
 
                 error:
                     "Password must be at least 6 characters",
 
-                success: null
+                success:
+                    null
 
             }
         );
@@ -764,18 +974,23 @@ exports.resetPassword = async (req, res) => {
 
 
     // Check passwords match
-    if (password !== confirmPassword) {
+    if (
+        password !==
+        confirmPassword
+    ) {
 
         return res.render(
             "resetPassword",
             {
 
-                token: token,
+                token:
+                    token,
 
                 error:
                     "Passwords do not match",
 
-                success: null
+                success:
+                    null
 
             }
         );
@@ -786,7 +1001,9 @@ exports.resetPassword = async (req, res) => {
     // Validate token again
     const findUserSql = `
         SELECT id
+
         FROM users
+
         WHERE reset_token = ?
         AND reset_token_expiry > NOW()
     `;
@@ -794,10 +1011,14 @@ exports.resetPassword = async (req, res) => {
 
     db.query(
         findUserSql,
-        [token],
+        [
+            token
+        ],
         async (err, results) => {
 
-            if (err) {
+            if (
+                err
+            ) {
 
                 console.error(
                     "Reset password database error:",
@@ -809,12 +1030,14 @@ exports.resetPassword = async (req, res) => {
                     "resetPassword",
                     {
 
-                        token: token,
+                        token:
+                            token,
 
                         error:
                             "Database error occurred",
 
-                        success: null
+                        success:
+                            null
 
                     }
                 );
@@ -823,18 +1046,22 @@ exports.resetPassword = async (req, res) => {
 
 
             // Token invalid or expired
-            if (results.length === 0) {
+            if (
+                results.length === 0
+            ) {
 
                 return res.render(
                     "resetPassword",
                     {
 
-                        token: null,
+                        token:
+                            null,
 
                         error:
                             "This password reset link is invalid or has expired.",
 
-                        success: null
+                        success:
+                            null
 
                     }
                 );
@@ -842,7 +1069,8 @@ exports.resetPassword = async (req, res) => {
             }
 
 
-            const user = results[0];
+            const user =
+                results[0];
 
 
             try {
@@ -855,14 +1083,15 @@ exports.resetPassword = async (req, res) => {
                     );
 
 
-                // Update password and
-                // remove reset token
+                // Update password and remove reset token
                 const updateSql = `
                     UPDATE users
+
                     SET
                         password = ?,
                         reset_token = NULL,
                         reset_token_expiry = NULL
+
                     WHERE id = ?
                 `;
 
@@ -875,7 +1104,9 @@ exports.resetPassword = async (req, res) => {
                     ],
                     (err) => {
 
-                        if (err) {
+                        if (
+                            err
+                        ) {
 
                             console.error(
                                 "Password update error:",
@@ -887,12 +1118,14 @@ exports.resetPassword = async (req, res) => {
                                 "resetPassword",
                                 {
 
-                                    token: token,
+                                    token:
+                                        token,
 
                                     error:
                                         "Could not update password",
 
-                                    success: null
+                                    success:
+                                        null
 
                                 }
                             );
@@ -911,9 +1144,11 @@ exports.resetPassword = async (req, res) => {
                             "resetPassword",
                             {
 
-                                token: null,
+                                token:
+                                    null,
 
-                                error: null,
+                                error:
+                                    null,
 
                                 success:
                                     "Password reset successful! You can now login with your new password."
@@ -924,8 +1159,9 @@ exports.resetPassword = async (req, res) => {
                     }
                 );
 
+            }
 
-            } catch (error) {
+            catch (error) {
 
                 console.error(
                     "Password hashing error:",
@@ -937,12 +1173,14 @@ exports.resetPassword = async (req, res) => {
                     "resetPassword",
                     {
 
-                        token: token,
+                        token:
+                            token,
 
                         error:
                             "Something went wrong while resetting password",
 
-                        success: null
+                        success:
+                            null
 
                     }
                 );
