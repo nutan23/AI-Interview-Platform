@@ -1,415 +1,83 @@
-const { execFile } = require("child_process");
-
+const axios = require("axios");
 const fs = require("fs");
-
 const path = require("path");
+const FormData = require("form-data");
 
 
 // ==========================================
-// CONFIGURATION
+// GROQ WHISPER CONFIGURATION
 // ==========================================
 
-const WHISPER_EXE =
-    "C:\\whisper.cpp\\build\\bin\\Release\\whisper-cli.exe";
+const GROQ_TRANSCRIPTION_URL =
+    "https://api.groq.com/openai/v1/audio/transcriptions";
 
 
 const WHISPER_MODEL =
-    "C:\\whisper.cpp\\models\\ggml-base.en.bin";
+    "whisper-large-v3-turbo";
 
 
 // ==========================================
-// CONVERT AUDIO TO WAV
-// ==========================================
-
-function convertToWav(
-    inputPath
-) {
-
-    return new Promise(
-        (
-            resolve,
-            reject
-        ) => {
-
-            const absoluteInputPath =
-                path.resolve(
-                    inputPath
-                );
-
-
-            const parsedPath =
-                path.parse(
-                    absoluteInputPath
-                );
-
-
-            const wavPath =
-                path.join(
-                    parsedPath.dir,
-                    parsedPath.name + "-converted.wav"
-                );
-
-
-            console.log(
-                "Converting audio to WAV..."
-            );
-
-
-            console.log(
-                "Input:",
-                absoluteInputPath
-            );
-
-
-            console.log(
-                "Output:",
-                wavPath
-            );
-
-
-            // ==========================================
-            // FFMPEG SETTINGS
-            // ==========================================
-            //
-            // -ac 1       = mono
-            // -ar 16000   = 16 kHz
-            // pcm_s16le   = standard PCM WAV
-            //
-            // These settings work well with whisper.cpp.
-            // ==========================================
-
-            const ffmpegArgs = [
-
-                "-y",
-
-                "-i",
-                absoluteInputPath,
-
-                "-ac",
-                "1",
-
-                "-ar",
-                "16000",
-
-                "-c:a",
-                "pcm_s16le",
-
-                wavPath
-
-            ];
-
-
-            execFile(
-
-                "ffmpeg",
-
-                ffmpegArgs,
-
-                {
-                    windowsHide: true
-                },
-
-                (
-                    error,
-                    stdout,
-                    stderr
-                ) => {
-
-                    if (error) {
-
-                        console.error(
-                            "FFmpeg conversion error:"
-                        );
-
-
-                        console.error(
-                            error
-                        );
-
-
-                        console.error(
-                            stderr
-                        );
-
-
-                        return reject(
-                            new Error(
-                                "Unable to convert audio to WAV."
-                            )
-                        );
-
-                    }
-
-
-                    if (
-                        !fs.existsSync(
-                            wavPath
-                        )
-                    ) {
-
-                        return reject(
-                            new Error(
-                                "Converted WAV file was not created."
-                            )
-                        );
-
-                    }
-
-
-                    console.log(
-                        "Audio conversion complete."
-                    );
-
-
-                    resolve(
-                        wavPath
-                    );
-
-                }
-
-            );
-
-        }
-
-    );
-
-}
-
-
-// ==========================================
-// TRANSCRIBE WAV WITH WHISPER
-// ==========================================
-
-function runWhisper(
-    wavPath
-) {
-
-    return new Promise(
-        (
-            resolve,
-            reject
-        ) => {
-
-            // ==========================================
-            // CHECK WHISPER
-            // ==========================================
-
-            if (
-                !fs.existsSync(
-                    WHISPER_EXE
-                )
-            ) {
-
-                return reject(
-                    new Error(
-                        "Whisper executable not found."
-                    )
-                );
-
-            }
-
-
-            // ==========================================
-            // CHECK MODEL
-            // ==========================================
-
-            if (
-                !fs.existsSync(
-                    WHISPER_MODEL
-                )
-            ) {
-
-                return reject(
-                    new Error(
-                        "Whisper model not found."
-                    )
-                );
-
-            }
-
-
-            // ==========================================
-            // CHECK WAV
-            // ==========================================
-
-            if (
-                !fs.existsSync(
-                    wavPath
-                )
-            ) {
-
-                return reject(
-                    new Error(
-                        "WAV file not found."
-                    )
-                );
-
-            }
-
-
-            console.log(
-                "Starting Whisper transcription..."
-            );
-
-
-            const args = [
-
-                "-m",
-                WHISPER_MODEL,
-
-                "-f",
-                wavPath,
-
-                "-otxt",
-
-                "-nt"
-
-            ];
-
-
-            execFile(
-
-                WHISPER_EXE,
-
-                args,
-
-                {
-                    windowsHide: true
-                },
-
-                (
-                    error,
-                    stdout,
-                    stderr
-                ) => {
-
-                    if (error) {
-
-                        console.error(
-                            "Whisper error:"
-                        );
-
-
-                        console.error(
-                            error
-                        );
-
-
-                        console.error(
-                            stderr
-                        );
-
-
-                        return reject(
-                            new Error(
-                                "Whisper transcription failed."
-                            )
-                        );
-
-                    }
-
-
-                    // ==========================================
-                    // TXT OUTPUT
-                    // ==========================================
-
-                    const transcriptPath =
-                        wavPath +
-                        ".txt";
-
-
-                    if (
-                        !fs.existsSync(
-                            transcriptPath
-                        )
-                    ) {
-
-                        return reject(
-                            new Error(
-                                "Whisper transcript file was not created."
-                            )
-                        );
-
-                    }
-
-
-                    const transcription =
-                        fs
-                            .readFileSync(
-                                transcriptPath,
-                                "utf8"
-                            )
-                            .trim();
-
-
-                    // ==========================================
-                    // DELETE TXT FILE
-                    // ==========================================
-
-                    try {
-
-                        fs.unlinkSync(
-                            transcriptPath
-                        );
-
-                    }
-
-                    catch (error) {
-
-                        console.log(
-                            "Could not delete transcript file."
-                        );
-
-                    }
-
-
-                    console.log(
-                        "Whisper transcription complete."
-                    );
-
-
-                    console.log(
-                        "Text:",
-                        transcription
-                    );
-
-
-                    resolve(
-                        transcription
-                    );
-
-                }
-
-            );
-
-        }
-
-    );
-
-}
-
-
-// ==========================================
-// MAIN TRANSCRIBE FUNCTION
+// TRANSCRIBE AUDIO USING GROQ
 // ==========================================
 
 async function transcribeAudio(
     audioPath
 ) {
 
-    let wavPath =
-        null;
-
-
     try {
 
+        console.log(
+            "=========================================="
+        );
+
+        console.log(
+            "Starting Groq audio transcription..."
+        );
+
+
         // ==========================================
-        // CHECK INPUT FILE
+        // CHECK API KEY
+        // ==========================================
+
+        if (
+            !process.env.GROQ_API_KEY
+        ) {
+
+            throw new Error(
+                "GROQ_API_KEY is missing."
+            );
+
+        }
+
+
+        // ==========================================
+        // CHECK AUDIO PATH
+        // ==========================================
+
+        if (
+            !audioPath
+        ) {
+
+            throw new Error(
+                "Audio path is missing."
+            );
+
+        }
+
+
+        const absoluteAudioPath =
+            path.resolve(
+                audioPath
+            );
+
+
+        // ==========================================
+        // CHECK AUDIO FILE
         // ==========================================
 
         if (
             !fs.existsSync(
-                audioPath
+                absoluteAudioPath
             )
         ) {
 
@@ -420,60 +88,254 @@ async function transcribeAudio(
         }
 
 
+        console.log(
+            "Audio file:",
+            absoluteAudioPath
+        );
+
+
+        console.log(
+            "Whisper model:",
+            WHISPER_MODEL
+        );
+
+
         // ==========================================
-        // CONVERT WEBM / AUDIO TO WAV
+        // CREATE MULTIPART FORM
         // ==========================================
 
-        wavPath =
-            await convertToWav(
-                audioPath
+        const formData =
+            new FormData();
+
+
+        formData.append(
+            "file",
+            fs.createReadStream(
+                absoluteAudioPath
+            )
+        );
+
+
+        formData.append(
+            "model",
+            WHISPER_MODEL
+        );
+
+
+        formData.append(
+            "response_format",
+            "json"
+        );
+
+
+        formData.append(
+            "language",
+            "en"
+        );
+
+
+        formData.append(
+            "temperature",
+            "0"
+        );
+
+
+        // ==========================================
+        // SEND AUDIO TO GROQ
+        // ==========================================
+
+        const response =
+            await axios.post(
+
+                GROQ_TRANSCRIPTION_URL,
+
+                formData,
+
+                {
+
+                    headers: {
+
+                        ...formData.getHeaders(),
+
+                        Authorization:
+                            `Bearer ${process.env.GROQ_API_KEY}`
+
+                    },
+
+
+                    maxContentLength:
+                        Infinity,
+
+
+                    maxBodyLength:
+                        Infinity,
+
+
+                    timeout:
+                        60000
+
+                }
+
             );
 
 
         // ==========================================
-        // SEND WAV TO WHISPER
+        // VALIDATE RESPONSE
         // ==========================================
+
+        if (
+            !response.data
+        ) {
+
+            throw new Error(
+                "Groq returned no transcription response."
+            );
+
+        }
+
 
         const transcription =
-            await runWhisper(
-                wavPath
+            String(
+                response.data.text || ""
+            )
+                .trim();
+
+
+        if (
+            transcription === ""
+        ) {
+
+            throw new Error(
+                "Groq returned an empty transcription."
             );
+
+        }
+
+
+        console.log(
+            "Groq transcription successful."
+        );
+
+
+        console.log(
+            "Transcription:",
+            transcription
+        );
+
+
+        console.log(
+            "=========================================="
+        );
 
 
         return transcription;
 
     }
 
-    finally {
+    catch (error) {
+
+        console.error(
+            "=========================================="
+        );
+
+
+        console.error(
+            "GROQ TRANSCRIPTION ERROR"
+        );
+
+
+        console.error(
+            "Message:",
+            error.message
+        );
+
 
         // ==========================================
-        // DELETE TEMP WAV
+        // GROQ HTTP ERROR
         // ==========================================
 
         if (
-            wavPath &&
-            fs.existsSync(
-                wavPath
-            )
+            error.response
         ) {
 
-            try {
+            console.error(
+                "HTTP Status:",
+                error.response.status
+            );
 
-                fs.unlinkSync(
-                    wavPath
+
+            console.error(
+                "Groq Response:",
+                error.response.data
+            );
+
+
+            if (
+                error.response.status === 401
+            ) {
+
+                throw new Error(
+                    "Groq API key is invalid."
                 );
 
             }
 
-            catch (error) {
 
-                console.log(
-                    "Could not delete temporary WAV file."
+            if (
+                error.response.status === 413
+            ) {
+
+                throw new Error(
+                    "Audio file is too large."
                 );
 
             }
+
+
+            if (
+                error.response.status === 429
+            ) {
+
+                throw new Error(
+                    "Groq transcription rate limit reached."
+                );
+
+            }
+
+
+            throw new Error(
+                error.response.data?.error?.message ||
+                "Groq transcription failed."
+            );
 
         }
+
+
+        // ==========================================
+        // TIMEOUT
+        // ==========================================
+
+        if (
+            error.code ===
+            "ECONNABORTED"
+        ) {
+
+            throw new Error(
+                "Audio transcription timed out."
+            );
+
+        }
+
+
+        console.error(
+            "=========================================="
+        );
+
+
+        throw new Error(
+            error.message ||
+            "Unable to transcribe audio."
+        );
 
     }
 
