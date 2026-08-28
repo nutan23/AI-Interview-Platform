@@ -2,15 +2,15 @@ const axios = require("axios");
 
 
 // ==========================================
-// OLLAMA CONFIGURATION
+// GROQ CONFIGURATION
 // ==========================================
 
-const OLLAMA_URL =
-    "http://127.0.0.1:11434/api/generate";
+const GROQ_URL =
+    "https://api.groq.com/openai/v1/chat/completions";
 
 
 const MODEL =
-    "llama3.2:1b";
+    "llama-3.1-8b-instant";
 
 
 // ==========================================
@@ -25,8 +25,23 @@ async function generateAI(
 
     try {
 
+        // ==========================================
+        // CHECK API KEY
+        // ==========================================
+
+        if (
+            !process.env.GROQ_API_KEY
+        ) {
+
+            throw new Error(
+                "GROQ_API_KEY is missing."
+            );
+
+        }
+
+
         console.log(
-            "Connecting to Ollama..."
+            "Connecting to Groq..."
         );
 
 
@@ -57,60 +72,73 @@ async function generateAI(
             model:
                 MODEL,
 
-            prompt:
-                prompt,
+            messages: [
+
+                {
+                    role:
+                        "user",
+
+                    content:
+                        String(prompt || "")
+                }
+
+            ],
+
+            temperature:
+                0.1,
+
+            max_tokens:
+                numPredict,
 
             stream:
-                false,
-
-            options: {
-
-                // More consistent output
-                temperature:
-                    0.1,
-
-                // Limit maximum output
-                num_predict:
-                    numPredict,
-
-                // Enough context for resume/interview
-                num_ctx:
-                    4096
-
-            }
+                false
 
         };
 
 
         // ==========================================
-        // FORCE JSON ONLY WHEN REQUIRED
+        // JSON MODE
         // ==========================================
 
         if (
             jsonMode === true
         ) {
 
-            requestBody.format =
-                "json";
+            requestBody.response_format = {
+                type:
+                    "json_object"
+            };
 
         }
 
 
         // ==========================================
-        // CALL OLLAMA
+        // CALL GROQ
         // ==========================================
 
         const response =
             await axios.post(
 
-                OLLAMA_URL,
+                GROQ_URL,
 
                 requestBody,
 
                 {
-                    // Maximum 5 minutes
+
+                    headers: {
+
+                        Authorization:
+                            `Bearer ${process.env.GROQ_API_KEY}`,
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+
                     timeout:
-                        300000
+                        60000
+
                 }
 
             );
@@ -125,51 +153,55 @@ async function generateAI(
         ) {
 
             throw new Error(
-                "Ollama returned no response data."
+                "Groq returned no response data."
             );
 
         }
+
+
+        const aiText =
+            response.data
+                ?.choices
+                ?.[0]
+                ?.message
+                ?.content;
 
 
         if (
-            !response.data.response
+            !aiText
         ) {
 
             throw new Error(
-                "Ollama returned an empty AI response."
+                "Groq returned an empty AI response."
             );
 
         }
 
 
-        // ==========================================
-        // CLEAN RESPONSE TEXT
-        // ==========================================
-
-        const aiText =
+        const cleanedText =
             String(
-                response.data.response
+                aiText
             )
                 .trim();
 
 
         if (
-            aiText === ""
+            cleanedText === ""
         ) {
 
             throw new Error(
-                "Ollama returned empty text."
+                "Groq returned empty text."
             );
 
         }
 
 
         console.log(
-            "Ollama response received successfully."
+            "Groq response received successfully."
         );
 
 
-        return aiText;
+        return cleanedText;
 
     }
 
@@ -181,7 +213,7 @@ async function generateAI(
 
 
         console.error(
-            "OLLAMA ERROR"
+            "GROQ ERROR"
         );
 
 
@@ -201,7 +233,7 @@ async function generateAI(
         ) {
 
             console.error(
-                "Ollama request timed out."
+                "Groq request timed out."
             );
 
 
@@ -213,28 +245,7 @@ async function generateAI(
 
 
         // ==========================================
-        // CONNECTION REFUSED
-        // ==========================================
-
-        if (
-            error.code ===
-            "ECONNREFUSED"
-        ) {
-
-            console.error(
-                "Could not connect to Ollama."
-            );
-
-
-            throw new Error(
-                "Ollama is not running."
-            );
-
-        }
-
-
-        // ==========================================
-        // OLLAMA HTTP ERROR
+        // HTTP ERROR
         // ==========================================
 
         if (
@@ -248,13 +259,36 @@ async function generateAI(
 
 
             console.error(
-                "Ollama Response:",
+                "Groq Response:",
                 error.response.data
             );
 
 
+            if (
+                error.response.status === 401
+            ) {
+
+                throw new Error(
+                    "Groq API key is invalid."
+                );
+
+            }
+
+
+            if (
+                error.response.status === 429
+            ) {
+
+                throw new Error(
+                    "Groq rate limit reached. Please try again shortly."
+                );
+
+            }
+
+
             throw new Error(
-                "Ollama returned an error."
+                error.response.data?.error?.message ||
+                "Groq returned an error."
             );
 
         }
