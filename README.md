@@ -1,245 +1,112 @@
 # 🎙️ AI Interview Preparation Platform
 
-An intelligent web-based interview preparation platform that helps students practice **resume-based interviews** and **subject-based technical interviews** using AI, voice interaction, automated answer evaluation, performance tracking, and personalized feedback.
+An AI-powered web application designed to help students practice technical interviews through resume-based and subject-based mock interviews with voice interaction, AI evaluation, and performance tracking.
 
-The platform analyzes a student's resume, generates relevant interview questions using a locally running AI model, accepts spoken answers, evaluates each answer, and generates detailed scores, mistakes, feedback, and improvement suggestions.
-
----
-
-## 🚀 Key Features
+## 🚀 Features
 
 ### 📄 Resume-Based Interview
+- Upload PDF or DOCX resume
+- Automatic resume text extraction and parsing
+- AI-generated questions based on resume content
+- Technical and non-technical interview questions
+- Voice-based question and answer interaction
+- AI evaluation of candidate answers
+- Score and improvement suggestions
 
-- Upload resume in PDF or DOCX format
-- Automatically extract resume text
-- Generate interview questions based on resume content
-- Supports technical and non-technical questions
-- User can select the number of questions
-- Supports **3 to 30 questions**
-- AI-generated interview questions
-- Voice-based question playback
-- Student can answer using voice
+### 📚 Subject-Based Interview
+Practice interviews for Computer Engineering subjects such as:
 
-### 📚 Subject-Based Interview Practice
+- DBMS
+- Computer Networks
+- Operating Systems
+- OOP
+- DSA
+- Other technical subjects
 
-Students can practice interviews for different Computer Engineering subjects.
+Users can select the subject and number of interview questions.
 
-Available subjects include:
+### 🎤 Voice Interview
+- AI questions are spoken using Text-to-Speech
+- Candidate answers using microphone
+- Speech-to-text transcription using Groq Whisper
+- Interview-like interactive experience
 
-- Data Structures & Algorithms (DSA)
-- Object-Oriented Programming (OOP)
-- Database Management Systems (DBMS)
-- Operating Systems (OS)
-- Computer Networks (CN)
-- Computer Organization & Architecture (COA)
-- Software Engineering
-- Web Development
-- Theory of Computation (TOC)
-- Compiler Design
-- Artificial Intelligence & Machine Learning
-- Cyber Security
-- Cloud Computing
-- Distributed Systems
-- Big Data & NoSQL
+### 🤖 AI Evaluation
+The system evaluates answers and provides:
 
-Subject practice supports:
-
-- Subject selection
-- Difficulty selection
-- Optional topic selection
-- **1 to 30 questions**
-- AI-generated technical questions
-
----
-
-## 🎤 Voice-Based Interview
-
-The platform provides an interactive interview experience using voice features.
-
-- Questions can be spoken aloud
-- Student answers can be captured through microphone
-- Speech is converted into text
-- Answer text is submitted for AI evaluation
-- Interview continues while answer evaluation can be processed separately
-
----
-
-## 🤖 AI Question Generation
-
-The project uses **Ollama** for local AI processing.
-
-Current AI model:
-
-```text
-llama3.2:1b
-```
-
-AI is used for:
-
-- Resume-based question generation
-- Subject-based question generation
-- Technical answer evaluation
-- Relevance checking
-- Completeness checking
-- Communication clarity checking
-- Grammar and terminology feedback
-- Improvement suggestions
-
----
-
-## 📊 AI Answer Evaluation
-
-Each submitted answer is evaluated using multiple criteria.
-
-### Evaluation Parameters
-
-- Relevance Score
-- Technical Score
-- Completeness Score
-- Clarity Score
-- Overall Score
-
-The system also provides:
-
+- Score
 - Feedback
 - Mistakes
-- Suggestions
-- Strengths
-- Weaknesses
-- Overall improvement suggestions
+- Areas for improvement
+- Interview performance analysis
 
-Each parameter is evaluated on a scale of **0 to 10**.
+### 📊 Performance Tracking
+Users can view their previous interview performance and scores.
 
-The final interview score is calculated using the evaluation results of all submitted answers.
-
----
-
-## ⚡ Background Answer Evaluation
-
-The platform supports individual answer evaluation.
-
-When a student submits an answer:
-
-1. The answer is stored in the database.
-2. Evaluation can begin for that answer.
-3. The student can continue with the next interview question.
-4. Evaluation results are stored separately.
-5. After all questions are completed, individual scores are combined.
-6. The final interview performance is generated.
-
-This avoids waiting for the complete interview before starting answer evaluation.
-
----
-
-## 📈 Performance Tracking
-
-The Performance section allows logged-in users to view their own interview performance.
-
-It can display information such as:
-
-- Previous interviews
-- Interview type
-- Subject
-- Number of questions
-- Overall score
-- Individual evaluation scores
-- Strengths
-- Weaknesses
-- Suggestions
-- Interview history
-
-Performance information is associated with the logged-in user.
-
----
-
-## 🔐 Authentication System
-
-The platform provides:
-
+### 🔐 Authentication
 - User Registration
-- User Login
-- Session-based Authentication
-- Logout
-- Password Hashing
+- Login / Logout
+- Session-based authentication
 - Forgot Password
-- Password Reset through Email
-
----
-
-## 📧 Forgot Password
-
-Users can request a password-reset link through their registered email address.
-
-The system uses **Nodemailer** with SMTP email configuration.
-
-For Gmail, an **App Password** should be used instead of the normal Gmail account password.
-
-Sensitive email credentials must be stored in environment variables and must never be committed to GitHub.
-
----
-
-## 🗂️ Resume Management
-
-Supported resume formats:
-
-```text
-PDF
-DOCX
-```
-
-Maximum upload size:
-
-```text
-5 MB
-```
-
-Resume text is extracted using:
-
-- `pdf-parse`
-- `mammoth`
-
-Extracted resume information is stored in MySQL and used during interview question generation.
+- Secure password reset through email
 
 ---
 
 ## 🛠️ Technology Stack
 
 ### Frontend
-
 - HTML
 - CSS
 - JavaScript
 - EJS
-- Web Speech APIs / browser voice features
+- Web Speech API
 
 ### Backend
-
 - Node.js
 - Express.js
-- Express Session
-- Multer
-- Axios
 
 ### Database
-
 - MySQL
-- mysql2
+- Aiven Cloud MySQL
 
-### Authentication & Email
-
-- bcrypt
-- express-session
-- Nodemailer
+### Artificial Intelligence
+- Groq API
+- GPT-OSS model for interview question generation and answer evaluation
+- Groq Whisper for speech-to-text transcription
 
 ### Resume Processing
-
 - pdf-parse
 - Mammoth
 
-### Artificial Intelligence
+### Email Service
+- Brevo Email API
 
-- Ollama
-- Llama 3.2 1B
+### Deployment
+- Render
+- Aiven Cloud
+- GitHub
+
+---
+
+## 🧠 System Workflow
+
+User Registration / Login  
+↓  
+Upload Resume OR Select Subject  
+↓  
+AI Generates Interview Questions  
+↓  
+Question is Spoken to Candidate  
+↓  
+Candidate Answers Using Microphone  
+↓  
+Speech Converted to Text  
+↓  
+AI Evaluates Answer  
+↓  
+Score + Feedback + Suggestions  
+↓  
+Final Interview Performance
 
 ---
 
@@ -249,333 +116,115 @@ Extracted resume information is stored in MySQL and used during interview questi
 AI-Interview-Platform/
 │
 ├── backend/
-│   │
 │   ├── config/
-│   │   └── db.js
-│   │
 │   ├── controllers/
-│   │
 │   ├── middleware/
-│   │
 │   ├── public/
-│   │   ├── css/
-│   │   ├── js/
-│   │   └── images/
-│   │
 │   ├── routes/
-│   │
 │   ├── services/
-│   │
-│   ├── uploads/
-│   │   └── audio/
-│   │
 │   ├── views/
-│   │
-│   ├── .env
 │   ├── app.js
 │   ├── package.json
 │   └── package-lock.json
 │
 ├── uploads/
-│   └── Resume files
 │
 ├── .gitignore
 └── README.md
-```
 
-> `.env`, `node_modules`, uploaded resumes, and temporary audio files should not be committed to GitHub.
+⚙️ Environment Variables
 
----
+Create a .env file for local development.
 
-# 💻 Requirements
-
-Before running the project, install:
-
-- Node.js
-- npm
-- MySQL / XAMPP
-- Ollama
-- Git
-- Modern web browser such as Chrome
-
----
-
-# ⚙️ Installation
-
-## 1. Clone the Repository
-
-```bash
-git clone <repository-url>
-```
-
-Move into the project:
-
-```bash
-cd AI-Interview-Platform
-```
-
----
-
-## 2. Open Backend Directory
-
-```bash
-cd backend
-```
-
----
-
-## 3. Install Node Dependencies
-
-```bash
-npm install
-```
-
-Dependencies will automatically be installed using `package.json`.
-
----
-
-# 🗄️ Database Setup
-
-Start MySQL using XAMPP or another MySQL server.
-
-Create the database:
-
-```sql
-CREATE DATABASE ai_interview;
-```
-
-The project uses MySQL tables for application data such as:
-
-- Users
-- Resumes
-- Interviews
-- Interview Questions
-- Interview Answers
-- Evaluation information
-- Password reset information
-
-Import the project's database schema before running the complete application.
-
----
-
-# 🔧 Environment Variables
-
-Create:
-
-```text
-backend/.env
-```
-
-Example configuration:
-
-```env
 PORT=3000
 
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=
-DB_NAME=ai_interview
+SESSION_SECRET=your_session_secret
 
-SESSION_SECRET=your_secure_session_secret
+DB_HOST=your_database_host
+DB_PORT=your_database_port
+DB_USER=your_database_user
+DB_PASSWORD=your_database_password
+DB_NAME=your_database_name
 
-EMAIL_USER=your_email@gmail.com
-EMAIL_PASS=your_gmail_app_password
-```
+GROQ_API_KEY=your_groq_api_key
 
-Additional environment variables may be required depending on the deployment configuration.
+BREVO_API_KEY=your_brevo_api_key
+BREVO_SENDER_EMAIL=your_verified_sender_email
 
-> Never upload your real `.env` file to GitHub.
+APP_BASE_URL=http://localhost:3000
 
----
+Never commit your .env file or API keys to GitHub.
 
-# 🤖 Ollama Setup
+💻 Installation
 
-Install Ollama on your system.
+Clone the repository:
 
-Pull the required model:
+git clone YOUR_GITHUB_REPOSITORY_URL
 
-```bash
-ollama pull llama3.2:1b
-```
+Open the backend directory:
 
-Check installed models:
+cd AI-Interview-Platform/backend
 
-```bash
-ollama list
-```
+Install dependencies:
 
-You should see:
+npm install
 
-```text
-llama3.2:1b
-```
+Create and configure your .env file.
 
-If the Ollama service is not already running, start it with:
+Start the application:
 
-```bash
-ollama serve
-```
-
-By default, Ollama is commonly available locally at:
-
-```text
-http://127.0.0.1:11434
-```
-
----
-
-# ▶️ Run the Application
-
-Start MySQL first.
-
-Make sure Ollama is running.
-
-Then open the backend directory:
-
-```bash
-cd backend
-```
-
-For development:
-
-```bash
-npm run dev
-```
-
-Or run the production start command:
-
-```bash
 npm start
-```
 
-The application will normally be available at:
+For development, if configured:
 
-```text
-http://localhost:3000
-```
+npm run dev
 
----
 
-# 🔄 Application Workflow
+🌐 Production Architecture
+User Browser
+     │
+     ▼
+Render
+Node.js + Express
+     │
+     ├────► Groq AI
+     │       ├─ Question Generation
+     │       ├─ Answer Evaluation
+     │       └─ Voice Transcription
+     │
+     ├────► Brevo
+     │       └─ Password Reset Email
+     │
+     └────► Aiven MySQL
+             ├─ Users
+             ├─ Resume Data
+             ├─ Interviews
+             └─ Performance
 
-```text
-Welcome Page
-      ↓
-Login / Register
-      ↓
-Dashboard
-      ↓
-Choose Interview Mode
-      ↓
- ┌──────────────────────┐
- │                      │
- ↓                      ↓
-Resume Interview     Subject Interview
- ↓                      ↓
-Upload Resume        Select Subject
- ↓                   Select Difficulty
-Resume Analysis      Select Questions
- ↓                      ↓
-Generate Questions   Generate Questions
- │                      │
- └──────────┬───────────┘
-            ↓
-       Start Interview
-            ↓
-       Voice Question
-            ↓
-       Student Answer
-            ↓
-       Save Answer
-            ↓
-       AI Evaluation
-            ↓
-       Final Score
-            ↓
-       Feedback
-            ↓
-       Performance
-```
 
----
+🔒 Security
+Passwords are hashed before storage
+Session-based authentication
+Environment variables are used for credentials and API keys
+Password reset tokens have limited validity
+API secrets are excluded from GitHub
 
-# 🔒 Security
+🎯 Project Objective
 
-The application uses several security practices:
+The objective of this project is to provide students with an accessible AI-powered mock interview environment where they can practice interviews, improve communication and technical knowledge, receive immediate AI-generated feedback, and track their performance.
 
-- Password hashing using bcrypt
-- Session-based authentication
-- Protected application routes
-- User-specific interview information
-- Environment variables for sensitive credentials
-- File-type validation for resume uploads
-- Resume file-size restrictions
-- Password-reset verification
+🔮 Future Enhancements
+Multiple AI interviewer avatars
+Advanced interview analytics
+Job-role-specific interviews
+Company-specific interview preparation
+Cloud resume storage
+Improved voice interaction
+Interview reports
+Admin dashboard
 
-Never commit:
 
-```text
-.env
-Email App Password
-Database Password
-Session Secret
-User Resume Files
-node_modules
-```
+👩‍💻 Developer
 
----
-
-# 🌐 Deployment Notes
-
-The production environment requires access to:
-
-- Node.js application server
-- MySQL database
-- Persistent resume storage
-- Email/SMTP service
-- AI model service
-
-Local Ollama addresses such as:
-
-```text
-127.0.0.1:11434
-```
-
-refer to the local machine and therefore require appropriate AI hosting/configuration when the application is deployed to a remote server.
-
-Uploaded resume files should use persistent storage in production so they are not lost during application redeployment.
-
-Production database and email credentials should be configured using the hosting platform's environment-variable system.
-
----
-
-# 🔮 Future Enhancements
-
-Possible future improvements include:
-
-- Additional AI models
-- Advanced speech analysis
-- Communication-skill scoring
-- Interview timer
-- Coding interview module
-- Company-specific interview preparation
-- Adaptive question difficulty
-- Detailed analytics dashboard
-- Cloud-based file storage
-- AI-generated personalized preparation plans
-- Mock interview reports
-- Downloadable interview scorecards
-
----
-
-# 🎯 Project Objective
-
-The objective of the AI Interview Preparation Platform is to provide students with an interactive environment where they can practice technical and resume-based interviews, receive AI-generated feedback, identify mistakes, improve communication and technical knowledge, and track their interview performance over time.
-
----
-
-## 📌 Important
-
-This project is intended for educational and interview-preparation purposes.
-
-AI-generated evaluation should be treated as guidance for practice and improvement rather than as an official hiring assessment.
+Nutan Ajit Salunkhe
+Computer Engineering Student
