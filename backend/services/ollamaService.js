@@ -29,9 +29,7 @@ async function generateAI(
         // CHECK API KEY
         // ==========================================
 
-        if (
-            !process.env.GROQ_API_KEY
-        ) {
+        if (!process.env.GROQ_API_KEY) {
 
             throw new Error(
                 "GROQ_API_KEY is missing."
@@ -40,31 +38,61 @@ async function generateAI(
         }
 
 
+        if (!prompt || !String(prompt).trim()) {
+
+            throw new Error(
+                "AI prompt is empty."
+            );
+
+        }
+
+
+        // ==========================================
+        // GIVE MODEL ENOUGH OUTPUT SPACE
+        // ==========================================
+
+        const maxOutputTokens =
+            Math.max(
+                Number(numPredict) || 300,
+                512
+            );
+
+
+        console.log(
+            "=========================================="
+        );
+
         console.log(
             "Connecting to Groq..."
         );
-
 
         console.log(
             "Model:",
             MODEL
         );
 
-
         console.log(
-            "Max output tokens:",
+            "Requested tokens:",
             numPredict
         );
 
+        console.log(
+            "Actual max tokens:",
+            maxOutputTokens
+        );
 
         console.log(
             "JSON Mode:",
             jsonMode
         );
 
+        console.log(
+            "=========================================="
+        );
+
 
         // ==========================================
-        // BUILD REQUEST BODY
+        // REQUEST BODY
         // ==========================================
 
         const requestBody = {
@@ -79,16 +107,25 @@ async function generateAI(
                         "user",
 
                     content:
-                        String(prompt || "")
+                        String(prompt).trim()
                 }
 
             ],
 
-            temperature:
-                0.1,
+            // GPT-OSS reasoning
+            reasoning_effort:
+                "low",
 
-            max_tokens:
-                numPredict,
+            // We only need final answer,
+            // not reasoning content
+            include_reasoning:
+                false,
+
+            temperature:
+                0.2,
+
+            max_completion_tokens:
+                maxOutputTokens,
 
             stream:
                 false
@@ -100,9 +137,7 @@ async function generateAI(
         // JSON MODE
         // ==========================================
 
-        if (
-            jsonMode === true
-        ) {
+        if (jsonMode === true) {
 
             requestBody.response_format = {
                 type:
@@ -131,10 +166,12 @@ async function generateAI(
                             `Bearer ${process.env.GROQ_API_KEY}`,
 
                         "Content-Type":
+                            "application/json",
+
+                        Accept:
                             "application/json"
 
                     },
-
 
                     timeout:
                         60000
@@ -145,52 +182,87 @@ async function generateAI(
 
 
         // ==========================================
-        // VALIDATE RESPONSE
+        // DEBUG RESPONSE
         // ==========================================
 
+        console.log(
+            "Groq HTTP Status:",
+            response.status
+        );
+
+
         if (
-            !response.data
+            !response.data ||
+            !Array.isArray(
+                response.data.choices
+            ) ||
+            response.data.choices.length === 0
         ) {
 
+            console.error(
+                "Groq raw response:",
+                response.data
+            );
+
             throw new Error(
-                "Groq returned no response data."
+                "Groq returned no AI choices."
             );
 
         }
 
 
-        const aiText =
+        const message =
             response.data
-                ?.choices
-                ?.[0]
-                ?.message
-                ?.content;
+                .choices[0]
+                .message;
 
 
-        if (
-            !aiText
-        ) {
+        if (!message) {
+
+            console.error(
+                "Groq choice:",
+                response.data.choices[0]
+            );
+
+            throw new Error(
+                "Groq returned no message."
+            );
+
+        }
+
+
+        // ==========================================
+        // GET FINAL AI TEXT
+        // ==========================================
+
+        const aiText =
+            String(
+                message.content || ""
+            ).trim();
+
+
+        if (!aiText) {
+
+            console.error(
+                "Groq message:",
+                message
+            );
+
+            console.error(
+                "Finish reason:",
+                response.data
+                    .choices[0]
+                    .finish_reason
+            );
+
+            console.error(
+                "Usage:",
+                response.data.usage
+            );
+
 
             throw new Error(
                 "Groq returned an empty AI response."
-            );
-
-        }
-
-
-        const cleanedText =
-            String(
-                aiText
-            )
-                .trim();
-
-
-        if (
-            cleanedText === ""
-        ) {
-
-            throw new Error(
-                "Groq returned empty text."
             );
 
         }
@@ -201,7 +273,13 @@ async function generateAI(
         );
 
 
-        return cleanedText;
+        console.log(
+            "Response length:",
+            aiText.length
+        );
+
+
+        return aiText;
 
     }
 
@@ -211,11 +289,9 @@ async function generateAI(
             "=========================================="
         );
 
-
         console.error(
             "GROQ ERROR"
         );
-
 
         console.error(
             "Message:",
@@ -224,39 +300,15 @@ async function generateAI(
 
 
         // ==========================================
-        // TIMEOUT
-        // ==========================================
-
-        if (
-            error.code ===
-            "ECONNABORTED"
-        ) {
-
-            console.error(
-                "Groq request timed out."
-            );
-
-
-            throw new Error(
-                "AI response is taking too long. Please try again."
-            );
-
-        }
-
-
-        // ==========================================
         // HTTP ERROR
         // ==========================================
 
-        if (
-            error.response
-        ) {
+        if (error.response) {
 
             console.error(
                 "HTTP Status:",
                 error.response.status
             );
-
 
             console.error(
                 "Groq Response:",
@@ -286,9 +338,41 @@ async function generateAI(
             }
 
 
+            if (
+                error.response.status === 400
+            ) {
+
+                throw new Error(
+                    error.response.data
+                        ?.error
+                        ?.message ||
+                    "Invalid Groq request."
+                );
+
+            }
+
+
             throw new Error(
-                error.response.data?.error?.message ||
+                error.response.data
+                    ?.error
+                    ?.message ||
                 "Groq returned an error."
+            );
+
+        }
+
+
+        // ==========================================
+        // TIMEOUT
+        // ==========================================
+
+        if (
+            error.code ===
+            "ECONNABORTED"
+        ) {
+
+            throw new Error(
+                "AI response is taking too long. Please try again."
             );
 
         }
