@@ -1,0 +1,2564 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>AI Interview | Interview</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6ff;
+            min-height: 100vh;
+            color: #1e293b;
+        }
+
+
+        /* ==========================================
+           NAVBAR
+        ========================================== */
+
+        .navbar {
+            height: 70px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            box-shadow:
+                0 2px 10px
+                rgba(0, 0, 0, 0.07);
+        }
+
+
+        .logo {
+            font-size: 23px;
+            font-weight: 700;
+            color: #4f46e5;
+        }
+
+
+        .interview-label {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+
+        /* ==========================================
+           MAIN
+        ========================================== */
+
+        .main {
+            max-width: 950px;
+            margin: 35px auto;
+            padding: 20px;
+        }
+
+
+        /* ==========================================
+           HEADER
+        ========================================== */
+
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+
+        .header h1 {
+            margin: 0 0 10px;
+            font-size: 34px;
+            color: #172033;
+        }
+
+
+        .header p {
+            margin: 0;
+            color: #64748b;
+            font-size: 16px;
+        }
+
+
+        /* ==========================================
+           PROGRESS
+        ========================================== */
+
+        .progress-container {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow:
+                0 3px 15px
+                rgba(0, 0, 0, 0.06);
+        }
+
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #4f46e5;
+            border-radius: 20px;
+            transition: width 0.4s ease;
+        }
+
+
+        /* ==========================================
+           INTERVIEW CARD
+        ========================================== */
+
+        .interview-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow:
+                0 6px 30px
+                rgba(0, 0, 0, 0.08);
+        }
+
+
+        /* ==========================================
+           AI INTERVIEWER
+        ========================================== */
+
+        .ai-interviewer-section {
+            padding: 35px 30px 30px;
+            text-align: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f8faff,
+                    #eef2ff
+                );
+
+            border-bottom:
+                1px solid #e2e8f0;
+        }
+
+
+        .ai-title {
+            font-size: 21px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 5px;
+        }
+
+
+        .ai-subtitle {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 22px;
+        }
+
+
+        /* ==========================================
+           STATIC FEMALE AVATAR
+        ========================================== */
+
+        .avatar-wrapper {
+            width: 260px;
+            height: 260px;
+            margin: 0 auto 18px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: white;
+            border: 6px solid white;
+
+            box-shadow:
+                0 8px 30px
+                rgba(79, 70, 229, 0.20);
+        }
+
+
+        .avatar-image {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 50%;
+        }
+
+
+        /* ==========================================
+           STATUS
+        ========================================== */
+
+        .voice-status {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+
+            padding: 9px 16px;
+
+            background: white;
+
+            border:
+                1px solid #e2e8f0;
+
+            border-radius: 25px;
+
+            color: #64748b;
+            font-size: 14px;
+        }
+
+
+        .status-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #94a3b8;
+        }
+
+
+        .voice-status.speaking {
+            color: #4f46e5;
+            font-weight: 600;
+        }
+
+
+        .voice-status.speaking
+        .status-dot {
+            background: #22c55e;
+            animation:
+                statusPulse
+                0.8s infinite;
+        }
+
+
+        .voice-status.recording {
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+
+        .voice-status.recording
+        .status-dot {
+            background: #dc2626;
+            animation:
+                statusPulse
+                0.8s infinite;
+        }
+
+
+        .voice-status.processing {
+            color: #d97706;
+            font-weight: 600;
+        }
+
+
+        .voice-status.processing
+        .status-dot {
+            background: #f59e0b;
+            animation:
+                statusPulse
+                0.8s infinite;
+        }
+
+
+        @keyframes statusPulse {
+
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.6);
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+        }
+
+
+        /* ==========================================
+           QUESTION
+        ========================================== */
+
+        .question-section {
+            padding: 35px 40px 20px;
+        }
+
+
+        .question-box {
+            background: #fafbff;
+
+            border:
+                1px solid #e2e8f0;
+
+            border-radius: 14px;
+            padding: 25px;
+        }
+
+
+        .question-number {
+            color: #4f46e5;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+
+        .question-text {
+            font-size: 22px;
+            line-height: 1.6;
+            color: #1e293b;
+        }
+
+
+        /* ==========================================
+           REPLAY
+        ========================================== */
+
+        .replay-section {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+
+        .replay-button {
+            border: none;
+            padding: 12px 22px;
+            border-radius: 9px;
+            background: #4f46e5;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+
+        .replay-button:hover {
+            background: #4338ca;
+        }
+
+
+        .replay-button:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+
+        /* ==========================================
+           ANSWER
+        ========================================== */
+
+        .answer-section {
+            padding: 15px 40px 40px;
+        }
+
+
+        .answer-section label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 700;
+            color: #334155;
+        }
+
+
+        #answerText {
+            width: 100%;
+            min-height: 160px;
+            padding: 15px;
+
+            border:
+                1px solid #cbd5e1;
+
+            border-radius: 10px;
+            resize: vertical;
+
+            font-family:
+                Arial,
+                sans-serif;
+
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+
+        #answerText:focus {
+            outline: none;
+            border-color: #4f46e5;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(79, 70, 229, 0.08);
+        }
+
+
+        /* ==========================================
+           RECORD
+        ========================================== */
+
+        .record-section {
+            text-align: center;
+            margin-top: 22px;
+        }
+
+
+        .record-button {
+            border: none;
+            padding: 14px 26px;
+            border-radius: 9px;
+            background: #dc2626;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+
+        .record-button:hover {
+            background: #b91c1c;
+        }
+
+
+        .record-button.recording {
+            background: #16a34a;
+        }
+
+
+        .record-button.recording:hover {
+            background: #15803d;
+        }
+
+
+        .record-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+
+        /* ==========================================
+           MESSAGES
+        ========================================== */
+
+        .recording-message,
+        .processing-message,
+        .transcription-success,
+        .warning {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+
+        .recording-message {
+            background: #f0fdf4;
+            color: #15803d;
+            font-weight: 600;
+        }
+
+
+        .processing-message {
+            background: #fffbeb;
+            color: #b45309;
+            font-weight: 600;
+        }
+
+
+        .transcription-success {
+            background: #ecfdf5;
+            color: #047857;
+            font-weight: 600;
+        }
+
+
+        .warning {
+            background: #fff7ed;
+            color: #c2410c;
+        }
+
+
+        /* ==========================================
+           SUBMIT
+        ========================================== */
+
+        .button-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+
+
+        .submit-button {
+            border: none;
+            padding: 14px 30px;
+            background: #4f46e5;
+            color: white;
+            border-radius: 9px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+
+        .submit-button:hover {
+            background: #4338ca;
+        }
+
+
+        .submit-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+
+        /* ==========================================
+           RESPONSIVE
+        ========================================== */
+
+        @media (max-width: 650px) {
+
+            .navbar {
+                padding: 0 18px;
+            }
+
+
+            .main {
+                padding: 12px;
+                margin: 20px auto;
+            }
+
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+
+            .avatar-wrapper {
+                width: 200px;
+                height: 200px;
+            }
+
+
+            .question-section {
+                padding:
+                    25px 20px 15px;
+            }
+
+
+            .answer-section {
+                padding:
+                    15px 20px 30px;
+            }
+
+
+            .question-text {
+                font-size: 18px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ==========================================
+         NAVBAR
+    ========================================== -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            AI Interview
+        </div>
+
+        <div class="interview-label">
+            AI-Powered Interview
+        </div>
+
+    </nav>
+
+
+
+    <!-- ==========================================
+         MAIN
+    ========================================== -->
+
+    <main class="main">
+
+
+        <div class="header">
+
+            <h1>
+                AI Interview
+            </h1>
+
+            <p>
+                Listen carefully and answer each
+                question clearly and confidently.
+            </p>
+
+        </div>
+
+
+
+        <!-- ==========================================
+             PROGRESS
+        ========================================== -->
+
+        <div class="progress-container">
+
+            <div class="progress-info">
+
+                <span>
+
+                    Question
+                    <%= question.question_number %>
+                    of
+                    <%= totalQuestions %>
+
+                </span>
+
+
+                <span id="progressPercent">
+                    0%
+                </span>
+
+            </div>
+
+
+            <div class="progress-bar">
+
+                <div
+                    class="progress-fill"
+                    id="progressFill"
+                ></div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ==========================================
+             INTERVIEW CARD
+        ========================================== -->
+
+        <div class="interview-card">
+
+
+            <!-- ==========================================
+                 FEMALE AI INTERVIEWER
+            ========================================== -->
+
+            <section class="ai-interviewer-section">
+
+                <div class="ai-title">
+                    AI Interviewer
+                </div>
+
+
+                <div class="ai-subtitle">
+                    Professional Virtual Interview Assistant
+                </div>
+
+
+                <div class="avatar-wrapper">
+
+                    <img
+                        src="/avatars/ai-female.png"
+                        alt="Professional female AI interviewer"
+                        class="avatar-image"
+                    >
+
+                </div>
+
+
+                <div
+                    class="voice-status"
+                    id="voiceStatus"
+                >
+
+                    <span
+                        class="status-dot"
+                    ></span>
+
+
+                    <span id="voiceStatusText">
+                        Ready
+                    </span>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- ==========================================
+                 QUESTION
+            ========================================== -->
+
+            <section class="question-section">
+
+                <div class="question-box">
+
+                    <div class="question-number">
+
+                        Question
+                        <%= question.question_number %>
+
+                    </div>
+
+
+                    <div
+                        class="question-text"
+                        id="questionText"
+                    >
+
+                        <%= question.question %>
+
+                    </div>
+
+                </div>
+
+
+                <div class="replay-section">
+
+                    <button
+                        type="button"
+                        class="replay-button"
+                        id="replayButton"
+                        onclick="speakQuestion()"
+                    >
+                        🔊 Replay Question
+                    </button>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- ==========================================
+                 ANSWER
+            ========================================== -->
+
+            <section class="answer-section">
+
+                <label for="answerText">
+                    Your Answer
+                </label>
+
+
+                <textarea
+                    id="answerText"
+                    placeholder="Click Start Answer, speak clearly, then click Stop Answer..."
+                ><%= existingAnswer || "" %></textarea>
+
+
+                <div class="record-section">
+
+                    <button
+                        type="button"
+                        class="record-button"
+                        id="recordButton"
+                        onclick="toggleRecording()"
+                    >
+                        🎤 Start Answer
+                    </button>
+
+                </div>
+
+
+                <div
+                    class="recording-message"
+                    id="recordingMessage"
+                >
+                    🎤 Recording your answer...
+                    Speak clearly, then click Stop Answer.
+                </div>
+
+
+                <div
+                    class="processing-message"
+                    id="processingMessage"
+                >
+                    ⏳ AI is transcribing your answer
+                    using local Whisper. Please wait...
+                </div>
+
+
+                <div
+                    class="transcription-success"
+                    id="transcriptionSuccess"
+                >
+                    ✓ Your answer has been transcribed.
+                    You can edit it before submitting.
+                </div>
+
+
+                <div
+                    class="warning"
+                    id="warning"
+                ></div>
+
+
+                <div class="button-section">
+
+                    <button
+                        type="button"
+                        class="submit-button"
+                        id="submitButton"
+                        onclick="submitAnswer()"
+                    >
+                        Submit Answer →
+                    </button>
+
+                </div>
+
+            </section>
+
+
+        </div>
+
+
+    </main>
+
+
+
+    <script>
+
+
+        // ==========================================
+        // INTERVIEW INFORMATION
+        // ==========================================
+
+        const interviewId =
+            Number(
+                "<%= interviewId %>"
+            );
+
+
+        const questionId =
+            Number(
+                "<%= question.id %>"
+            );
+
+
+        const currentQuestion =
+            Number(
+                "<%= question.question_number %>"
+            );
+
+
+        const totalQuestions =
+            Number(
+                "<%= totalQuestions %>"
+            );
+
+
+        const questionText =
+            document
+                .getElementById(
+                    "questionText"
+                )
+                .innerText
+                .trim();
+
+
+
+        // ==========================================
+        // ELEMENTS
+        // ==========================================
+
+        const voiceStatus =
+            document.getElementById(
+                "voiceStatus"
+            );
+
+
+        const voiceStatusText =
+            document.getElementById(
+                "voiceStatusText"
+            );
+
+
+        const replayButton =
+            document.getElementById(
+                "replayButton"
+            );
+
+
+        const recordButton =
+            document.getElementById(
+                "recordButton"
+            );
+
+
+        const answerText =
+            document.getElementById(
+                "answerText"
+            );
+
+
+        const recordingMessage =
+            document.getElementById(
+                "recordingMessage"
+            );
+
+
+        const processingMessage =
+            document.getElementById(
+                "processingMessage"
+            );
+
+
+        const transcriptionSuccess =
+            document.getElementById(
+                "transcriptionSuccess"
+            );
+
+
+        const warning =
+            document.getElementById(
+                "warning"
+            );
+
+
+        const submitButton =
+            document.getElementById(
+                "submitButton"
+            );
+
+
+
+        // ==========================================
+        // SUBMIT BUTTON TEXT
+        // ==========================================
+
+        if (
+            currentQuestion ===
+            totalQuestions
+        ) {
+
+            submitButton.innerText =
+                "Finish Interview";
+
+        }
+
+        else {
+
+            submitButton.innerText =
+                "Submit Answer & Next →";
+
+        }
+
+
+
+        // ==========================================
+        // PROGRESS
+        // ==========================================
+
+        let progress =
+            Math.round(
+
+                (
+                    currentQuestion /
+                    totalQuestions
+                )
+
+                * 100
+
+            );
+
+
+        if (
+            !Number.isFinite(
+                progress
+            )
+        ) {
+
+            progress = 0;
+
+        }
+
+
+        document
+            .getElementById(
+                "progressFill"
+            )
+            .style
+            .width =
+            progress + "%";
+
+
+        document
+            .getElementById(
+                "progressPercent"
+            )
+            .innerText =
+            progress + "%";
+
+
+
+        // ==========================================
+        // BROWSER VOICES
+        // ==========================================
+
+        let availableVoices = [];
+
+
+        function loadVoices() {
+
+            if (
+                !(
+                    "speechSynthesis"
+                    in window
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            availableVoices =
+                window
+                    .speechSynthesis
+                    .getVoices();
+
+        }
+
+
+        if (
+            "speechSynthesis"
+            in window
+        ) {
+
+            loadVoices();
+
+
+            window
+                .speechSynthesis
+                .onvoiceschanged =
+                loadVoices;
+
+        }
+
+
+
+        // ==========================================
+        // CLEAN QUESTION TEXT
+        // ==========================================
+
+        function cleanQuestionForSpeech(
+            text
+        ) {
+
+            let cleanText =
+                String(
+                    text || ""
+                );
+
+
+            cleanText =
+                cleanText.replace(
+                    /#+/g,
+                    ""
+                );
+
+
+            cleanText =
+                cleanText.replace(
+                    /[*_`~]/g,
+                    ""
+                );
+
+
+            cleanText =
+                cleanText.replace(
+                    /["“”]/g,
+                    ""
+                );
+
+
+            cleanText =
+                cleanText.replace(
+                    /\//g,
+                    " or "
+                );
+
+
+            cleanText =
+                cleanText.replace(
+                    /&/g,
+                    " and "
+                );
+
+
+            cleanText =
+                cleanText.replace(
+                    /:/g,
+                    ". "
+                );
+
+
+            cleanText =
+                cleanText.replace(
+                    /;/g,
+                    ". "
+                );
+
+
+            cleanText =
+                cleanText.replace(
+                    /[\[\]{}]/g,
+                    ""
+                );
+
+
+            cleanText =
+                cleanText.replace(
+                    /\s+/g,
+                    " "
+                );
+
+
+            return cleanText.trim();
+
+        }
+
+
+
+        // ==========================================
+        // SELECT FEMALE VOICE
+        // ==========================================
+
+        function selectFemaleVoice() {
+
+            const voices =
+                availableVoices.length > 0
+
+                    ? availableVoices
+
+                    : window
+                        .speechSynthesis
+                        .getVoices();
+
+
+            let selectedVoice =
+                voices.find(
+
+                    voice =>
+                        voice.name ===
+                        "Google UK English Female"
+
+                );
+
+
+            if (selectedVoice) {
+
+                return selectedVoice;
+
+            }
+
+
+            selectedVoice =
+                voices.find(
+
+                    voice =>
+                        voice.name
+                            .toLowerCase()
+                            .includes(
+                                "zira"
+                            )
+
+                );
+
+
+            if (selectedVoice) {
+
+                return selectedVoice;
+
+            }
+
+
+            selectedVoice =
+                voices.find(
+
+                    voice => {
+
+                        const name =
+                            voice.name
+                                .toLowerCase();
+
+
+                        const language =
+                            voice.lang
+                                .toLowerCase();
+
+
+                        return (
+
+                            language
+                                .startsWith(
+                                    "en"
+                                )
+
+                            &&
+
+                            name.includes(
+                                "female"
+                            )
+
+                        );
+
+                    }
+
+                );
+
+
+            if (selectedVoice) {
+
+                return selectedVoice;
+
+            }
+
+
+            selectedVoice =
+                voices.find(
+
+                    voice =>
+                        voice.name ===
+                        "Google US English"
+
+                );
+
+
+            if (selectedVoice) {
+
+                return selectedVoice;
+
+            }
+
+
+            return voices.find(
+
+                voice =>
+                    voice.lang
+                        .toLowerCase()
+                        .startsWith(
+                            "en"
+                        )
+
+            );
+
+        }
+
+
+
+        // ==========================================
+        // STATUS HELPERS
+        // ==========================================
+
+        function resetVoiceStatusClasses() {
+
+            voiceStatus.classList.remove(
+                "speaking"
+            );
+
+            voiceStatus.classList.remove(
+                "recording"
+            );
+
+            voiceStatus.classList.remove(
+                "processing"
+            );
+
+        }
+
+
+        function showAISpeakingStatus() {
+
+            resetVoiceStatusClasses();
+
+
+            voiceStatus.classList.add(
+                "speaking"
+            );
+
+
+            voiceStatusText.innerText =
+                "AI is speaking...";
+
+
+            replayButton.disabled =
+                true;
+
+        }
+
+
+        function showReadyStatus() {
+
+            resetVoiceStatusClasses();
+
+
+            voiceStatusText.innerText =
+                "Ready for your answer";
+
+
+            replayButton.disabled =
+                false;
+
+        }
+
+
+        function showRecordingStatus() {
+
+            resetVoiceStatusClasses();
+
+
+            voiceStatus.classList.add(
+                "recording"
+            );
+
+
+            voiceStatusText.innerText =
+                "Recording your answer...";
+
+        }
+
+
+        function showProcessingStatus() {
+
+            resetVoiceStatusClasses();
+
+
+            voiceStatus.classList.add(
+                "processing"
+            );
+
+
+            voiceStatusText.innerText =
+                "Transcribing with Whisper...";
+
+        }
+
+
+        function showTranscribedStatus() {
+
+            resetVoiceStatusClasses();
+
+
+            voiceStatusText.innerText =
+                "Answer transcribed";
+
+        }
+
+
+
+        // ==========================================
+        // SPEAK QUESTION
+        // ==========================================
+
+        function speakQuestion() {
+
+            if (
+                !(
+                    "speechSynthesis"
+                    in window
+                )
+            ) {
+
+                alert(
+                    "Your browser does not support voice playback."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                isRecording
+            ) {
+
+                alert(
+                    "Please stop recording before replaying the question."
+                );
+
+                return;
+
+            }
+
+
+            window
+                .speechSynthesis
+                .cancel();
+
+
+            const cleanText =
+                cleanQuestionForSpeech(
+                    questionText
+                );
+
+
+            const speech =
+                new SpeechSynthesisUtterance(
+                    cleanText
+                );
+
+
+            const femaleVoice =
+                selectFemaleVoice();
+
+
+            if (
+                femaleVoice
+            ) {
+
+                speech.voice =
+                    femaleVoice;
+
+
+                speech.lang =
+                    femaleVoice.lang;
+
+            }
+
+            else {
+
+                speech.lang =
+                    "en-GB";
+
+            }
+
+
+            speech.rate =
+                0.88;
+
+
+            speech.pitch =
+                1;
+
+
+            speech.volume =
+                1;
+
+
+            speech.onstart =
+                function () {
+
+                    showAISpeakingStatus();
+
+                };
+
+
+            speech.onend =
+                function () {
+
+                    showReadyStatus();
+
+                };
+
+
+            speech.onerror =
+                function () {
+
+                    showReadyStatus();
+
+                };
+
+
+            window
+                .speechSynthesis
+                .speak(
+                    speech
+                );
+
+        }
+
+
+
+        // ==========================================
+        // MEDIA RECORDER
+        // ==========================================
+
+        let mediaRecorder =
+            null;
+
+
+        let mediaStream =
+            null;
+
+
+        let audioChunks =
+            [];
+
+
+        let isRecording =
+            false;
+
+
+        let isTranscribing =
+            false;
+
+
+
+        // ==========================================
+        // AUDIO MIME TYPE
+        // ==========================================
+
+        function getSupportedMimeType() {
+
+            const types = [
+
+                "audio/webm;codecs=opus",
+
+                "audio/webm",
+
+                "audio/ogg;codecs=opus",
+
+                "audio/ogg"
+
+            ];
+
+
+            for (
+                const type of types
+            ) {
+
+                if (
+                    MediaRecorder
+                        .isTypeSupported(
+                            type
+                        )
+                ) {
+
+                    return type;
+
+                }
+
+            }
+
+
+            return "";
+
+        }
+
+
+
+        // ==========================================
+        // START / STOP
+        // ==========================================
+
+        async function toggleRecording() {
+
+            if (
+                isTranscribing
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                isRecording
+            ) {
+
+                stopRecording();
+
+                return;
+
+            }
+
+
+            await startRecording();
+
+        }
+
+
+
+        // ==========================================
+        // START RECORDING
+        // ==========================================
+
+        async function startRecording() {
+
+            if (
+                !navigator.mediaDevices ||
+                !navigator.mediaDevices.getUserMedia
+            ) {
+
+                showError(
+                    "Your browser does not support microphone recording."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                typeof MediaRecorder ===
+                "undefined"
+            ) {
+
+                showError(
+                    "MediaRecorder is not supported in this browser."
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+                if (
+                    "speechSynthesis"
+                    in window
+                ) {
+
+                    window
+                        .speechSynthesis
+                        .cancel();
+
+                }
+
+
+                hideMessages();
+
+
+                mediaStream =
+                    await navigator
+                        .mediaDevices
+                        .getUserMedia({
+
+                            audio: {
+
+                                echoCancellation:
+                                    true,
+
+                                noiseSuppression:
+                                    true,
+
+                                autoGainControl:
+                                    true
+
+                            }
+
+                        });
+
+
+                const mimeType =
+                    getSupportedMimeType();
+
+
+                if (
+                    mimeType
+                ) {
+
+                    mediaRecorder =
+                        new MediaRecorder(
+
+                            mediaStream,
+
+                            {
+                                mimeType:
+                                    mimeType
+                            }
+
+                        );
+
+                }
+
+                else {
+
+                    mediaRecorder =
+                        new MediaRecorder(
+                            mediaStream
+                        );
+
+                }
+
+
+                audioChunks =
+                    [];
+
+
+                mediaRecorder.ondataavailable =
+                    function (event) {
+
+                        if (
+                            event.data &&
+                            event.data.size > 0
+                        ) {
+
+                            audioChunks.push(
+                                event.data
+                            );
+
+                        }
+
+                    };
+
+
+                mediaRecorder.onstart =
+                    function () {
+
+                        isRecording =
+                            true;
+
+
+                        recordButton
+                            .classList
+                            .add(
+                                "recording"
+                            );
+
+
+                        recordButton.innerText =
+                            "⏹ Stop Answer";
+
+
+                        recordingMessage
+                            .style
+                            .display =
+                            "block";
+
+
+                        submitButton.disabled =
+                            true;
+
+
+                        replayButton.disabled =
+                            true;
+
+
+                        showRecordingStatus();
+
+                    };
+
+
+                mediaRecorder.onstop =
+                    async function () {
+
+                        isRecording =
+                            false;
+
+
+                        recordButton
+                            .classList
+                            .remove(
+                                "recording"
+                            );
+
+
+                        recordButton.innerText =
+                            "🎤 Start Answer";
+
+
+                        recordingMessage
+                            .style
+                            .display =
+                            "none";
+
+
+                        stopMicrophoneTracks();
+
+
+                        if (
+                            audioChunks.length === 0
+                        ) {
+
+                            showError(
+                                "No audio was recorded. Please try again."
+                            );
+
+
+                            submitButton.disabled =
+                                false;
+
+
+                            replayButton.disabled =
+                                false;
+
+
+                            showReadyStatus();
+
+
+                            return;
+
+                        }
+
+
+                        const actualMimeType =
+                            mediaRecorder.mimeType ||
+                            "audio/webm";
+
+
+                        const audioBlob =
+                            new Blob(
+
+                                audioChunks,
+
+                                {
+                                    type:
+                                        actualMimeType
+                                }
+
+                            );
+
+
+                        await transcribeWithWhisper(
+                            audioBlob
+                        );
+
+                    };
+
+
+                mediaRecorder.onerror =
+                    function (event) {
+
+                        console.error(
+                            "MediaRecorder error:",
+                            event
+                        );
+
+
+                        isRecording =
+                            false;
+
+
+                        stopMicrophoneTracks();
+
+
+                        showError(
+                            "Audio recording failed. Please try again."
+                        );
+
+
+                        recordButton
+                            .classList
+                            .remove(
+                                "recording"
+                            );
+
+
+                        recordButton.innerText =
+                            "🎤 Start Answer";
+
+
+                        submitButton.disabled =
+                            false;
+
+
+                        replayButton.disabled =
+                            false;
+
+
+                        showReadyStatus();
+
+                    };
+
+
+                mediaRecorder.start();
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Microphone error:",
+                    error
+                );
+
+
+                stopMicrophoneTracks();
+
+
+                if (
+                    error.name ===
+                    "NotAllowedError"
+                ) {
+
+                    showError(
+                        "Microphone permission is blocked. Please allow microphone access."
+                    );
+
+                }
+
+                else if (
+                    error.name ===
+                    "NotFoundError"
+                ) {
+
+                    showError(
+                        "No microphone was found."
+                    );
+
+                }
+
+                else {
+
+                    showError(
+                        "Unable to access your microphone."
+                    );
+
+                }
+
+
+                showReadyStatus();
+
+            }
+
+        }
+
+
+
+        // ==========================================
+        // STOP RECORDING
+        // ==========================================
+
+        function stopRecording() {
+
+            if (
+                !mediaRecorder
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                mediaRecorder.state ===
+                "recording"
+            ) {
+
+                mediaRecorder.stop();
+
+            }
+
+        }
+
+
+
+        // ==========================================
+        // STOP MICROPHONE
+        // ==========================================
+
+        function stopMicrophoneTracks() {
+
+            if (
+                mediaStream
+            ) {
+
+                mediaStream
+                    .getTracks()
+                    .forEach(
+
+                        track =>
+                            track.stop()
+
+                    );
+
+
+                mediaStream =
+                    null;
+
+            }
+
+        }
+
+
+
+        // ==========================================
+        // WHISPER TRANSCRIPTION
+        // ==========================================
+
+        async function transcribeWithWhisper(
+            audioBlob
+        ) {
+
+            try {
+
+                isTranscribing =
+                    true;
+
+
+                hideMessages();
+
+
+                processingMessage
+                    .style
+                    .display =
+                    "block";
+
+
+                recordButton.disabled =
+                    true;
+
+
+                submitButton.disabled =
+                    true;
+
+
+                replayButton.disabled =
+                    true;
+
+
+                showProcessingStatus();
+
+
+                const formData =
+                    new FormData();
+
+
+                let extension =
+                    "webm";
+
+
+                if (
+                    audioBlob.type.includes(
+                        "ogg"
+                    )
+                ) {
+
+                    extension =
+                        "ogg";
+
+                }
+
+
+                formData.append(
+
+                    "audio",
+
+                    audioBlob,
+
+                    "student-answer." +
+                    extension
+
+                );
+
+
+                const response =
+                    await fetch(
+
+                        "/interview/transcribe-audio",
+
+                        {
+
+                            method:
+                                "POST",
+
+                            body:
+                                formData
+
+                        }
+
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    !response.ok ||
+                    !data.success
+                ) {
+
+                    throw new Error(
+
+                        data.message ||
+                        data.error ||
+                        "Unable to transcribe answer."
+
+                    );
+
+                }
+
+
+                const transcribedText =
+                    String(
+                        data.text || ""
+                    )
+                    .trim();
+
+
+                if (
+                    transcribedText === ""
+                ) {
+
+                    throw new Error(
+                        "Whisper could not detect clear speech."
+                    );
+
+                }
+
+
+                /*
+                 * If there was an old saved answer,
+                 * new voice text is added below it.
+                 */
+
+                const oldText =
+                    answerText
+                        .value
+                        .trim();
+
+
+                if (
+                    oldText !== ""
+                ) {
+
+                    answerText.value =
+                        oldText +
+                        "\n" +
+                        transcribedText;
+
+                }
+
+                else {
+
+                    answerText.value =
+                        transcribedText;
+
+                }
+
+
+                processingMessage
+                    .style
+                    .display =
+                    "none";
+
+
+                transcriptionSuccess
+                    .style
+                    .display =
+                    "block";
+
+
+                showTranscribedStatus();
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Whisper error:",
+                    error
+                );
+
+
+                processingMessage
+                    .style
+                    .display =
+                    "none";
+
+
+                showError(
+                    error.message
+                );
+
+
+                showReadyStatus();
+
+            }
+
+            finally {
+
+                isTranscribing =
+                    false;
+
+
+                recordButton.disabled =
+                    false;
+
+
+                submitButton.disabled =
+                    false;
+
+
+                replayButton.disabled =
+                    false;
+
+            }
+
+        }
+
+
+
+        // ==========================================
+        // MESSAGES
+        // ==========================================
+
+        function hideMessages() {
+
+            warning.style.display =
+                "none";
+
+
+            recordingMessage.style.display =
+                "none";
+
+
+            processingMessage.style.display =
+                "none";
+
+
+            transcriptionSuccess.style.display =
+                "none";
+
+        }
+
+
+        function showError(
+            message
+        ) {
+
+            warning.innerText =
+                message;
+
+
+            warning.style.display =
+                "block";
+
+        }
+
+
+
+        // ==========================================
+        // SUBMIT ANSWER AND MOVE NEXT
+        // ==========================================
+
+        async function submitAnswer() {
+
+            if (
+                isRecording
+            ) {
+
+                alert(
+                    "Please stop recording before submitting."
+                );
+
+                return;
+
+            }
+
+
+            if (
+                isTranscribing
+            ) {
+
+                alert(
+                    "Please wait until Whisper finishes transcribing."
+                );
+
+                return;
+
+            }
+
+
+            const answer =
+                answerText
+                    .value
+                    .trim();
+
+
+            if (
+                answer === ""
+            ) {
+
+                alert(
+                    "Please record or type an answer before submitting."
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+                submitButton.disabled =
+                    true;
+
+
+                recordButton.disabled =
+                    true;
+
+
+                replayButton.disabled =
+                    true;
+
+
+                if (
+                    currentQuestion ===
+                    totalQuestions
+                ) {
+
+                    submitButton.innerText =
+                        "Finishing Interview...";
+
+                }
+
+                else {
+
+                    submitButton.innerText =
+                        "Saving Answer...";
+
+                }
+
+
+                // ==========================================
+                // SEND ANSWER TO NODE
+                // ==========================================
+
+                const response =
+                    await fetch(
+
+                        "/interview/submit-answer",
+
+                        {
+
+                            method:
+                                "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json"
+
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    interviewId:
+                                        interviewId,
+
+                                    questionId:
+                                        questionId,
+
+                                    answerText:
+                                        answer
+
+                                })
+
+                        }
+
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    !response.ok ||
+                    !data.success
+                ) {
+
+                    throw new Error(
+
+                        data.message ||
+                        "Unable to save answer."
+
+                    );
+
+                }
+
+
+                // ==========================================
+                // NEXT QUESTION
+                // ==========================================
+
+                if (
+                    data.completed ===
+                    false
+                ) {
+
+                    window.location.href =
+                        data.redirectUrl;
+
+
+                    return;
+
+                }
+
+
+                // ==========================================
+                // LAST QUESTION COMPLETED
+                // ==========================================
+
+                if (
+                    data.completed ===
+                    true
+                ) {
+
+                    alert(
+                        "Interview completed successfully! All answers have been saved."
+                    );
+
+
+                    /*
+                     * Step 4D:
+                     * Change this to evaluation/result page.
+                     */
+
+                    window.location.href =
+                     `/interview/evaluate/${interviewId}`;
+
+                    return;
+                        
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Submit Answer Error:",
+                    error
+                );
+
+
+                alert(
+                    error.message ||
+                    "Something went wrong while saving your answer."
+                );
+
+
+                submitButton.disabled =
+                    false;
+
+
+                recordButton.disabled =
+                    false;
+
+
+                replayButton.disabled =
+                    false;
+
+
+                if (
+                    currentQuestion ===
+                    totalQuestions
+                ) {
+
+                    submitButton.innerText =
+                        "Finish Interview";
+
+                }
+
+                else {
+
+                    submitButton.innerText =
+                        "Submit Answer & Next →";
+
+                }
+
+            }
+
+        }
+
+
+
+        // ==========================================
+        // CLEANUP
+        // ==========================================
+
+        window.addEventListener(
+
+            "beforeunload",
+
+            function () {
+
+                if (
+                    "speechSynthesis"
+                    in window
+                ) {
+
+                    window
+                        .speechSynthesis
+                        .cancel();
+
+                }
+
+
+                if (
+                    isRecording &&
+                    mediaRecorder
+                ) {
+
+                    try {
+
+                        mediaRecorder.stop();
+
+                    }
+
+                    catch (error) {
+
+                    }
+
+                }
+
+
+                stopMicrophoneTracks();
+
+            }
+
+        );
+
+
+    </script>
+
+
+</body>
+
+</html>

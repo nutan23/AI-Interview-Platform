@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Performance | AI Interview</title>
+
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f6ff;
+            color: #1e293b;
+        }
+
+
+        /* ==========================================
+           NAVBAR
+        ========================================== */
+
+        .navbar {
+            height: 70px;
+            background: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 40px;
+
+            box-shadow:
+                0 2px 10px
+                rgba(0, 0, 0, 0.07);
+        }
+
+
+        .logo {
+            font-size: 23px;
+            font-weight: 700;
+            color: #4f46e5;
+        }
+
+
+        .nav-links {
+            display: flex;
+            gap: 22px;
+        }
+
+
+        .nav-links a {
+            color: #4f46e5;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+
+        /* ==========================================
+           MAIN CONTAINER
+        ========================================== */
+
+        .container {
+            width: 92%;
+            max-width: 1200px;
+
+            margin: 35px auto;
+        }
+
+
+        .page-title {
+            margin-bottom: 30px;
+        }
+
+
+        .page-title h1 {
+            margin: 0 0 8px;
+            font-size: 34px;
+        }
+
+
+        .page-title p {
+            margin: 0;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+
+        /* ==========================================
+           TOP STATISTICS
+        ========================================== */
+
+        .stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(5, 1fr);
+
+            gap: 16px;
+
+            margin-bottom: 28px;
+        }
+
+
+        .stat-card {
+            background: white;
+
+            padding: 22px;
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 4px 18px
+                rgba(0, 0, 0, 0.05);
+        }
+
+
+        .stat-card p {
+            margin: 0;
+
+            color: #64748b;
+
+            font-size: 14px;
+        }
+
+
+        .stat-card h2 {
+            margin: 10px 0 0;
+
+            color: #4f46e5;
+
+            font-size: 28px;
+        }
+
+
+        /* ==========================================
+           SECTION
+        ========================================== */
+
+        .section {
+            background: white;
+
+            padding: 26px;
+
+            margin-bottom: 25px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 4px 18px
+                rgba(0, 0, 0, 0.05);
+        }
+
+
+        .section h2 {
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+
+        .description {
+            color: #64748b;
+
+            margin-top: 0;
+            margin-bottom: 22px;
+
+            line-height: 1.5;
+        }
+
+
+        /* ==========================================
+           SKILL BREAKDOWN
+        ========================================== */
+
+        .skill-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 15px;
+        }
+
+
+        .skill {
+            background: #f8fafc;
+
+            padding: 20px;
+
+            border-radius: 12px;
+
+            text-align: center;
+
+            border:
+                1px solid #e2e8f0;
+        }
+
+
+        .skill span {
+            color: #64748b;
+        }
+
+
+        .skill h3 {
+            margin: 10px 0 0;
+
+            color: #4f46e5;
+
+            font-size: 25px;
+        }
+
+
+        /* ==========================================
+           GRAPH
+        ========================================== */
+
+        .chart-container {
+            position: relative;
+
+            width: 100%;
+            height: 320px;
+        }
+
+
+        .trend-label {
+            display: inline-block;
+
+            margin-bottom: 18px;
+
+            padding: 7px 14px;
+
+            border-radius: 20px;
+
+            background: #eef2ff;
+
+            color: #4338ca;
+
+            font-weight: 700;
+
+            font-size: 14px;
+        }
+
+
+        /* ==========================================
+           SUBJECT INSIGHTS
+        ========================================== */
+
+        .insight-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 16px;
+        }
+
+
+        .insight {
+            background: #f8fafc;
+
+            border:
+                1px solid #e2e8f0;
+
+            border-radius: 12px;
+
+            padding: 20px;
+        }
+
+
+        .insight h3 {
+            margin-top: 0;
+            margin-bottom: 14px;
+        }
+
+
+        .insight strong {
+            line-height: 1.5;
+        }
+
+
+        .big-score {
+            margin-top: 10px;
+
+            color: #4f46e5;
+
+            font-size: 25px;
+
+            font-weight: 700;
+        }
+
+
+        /* ==========================================
+           SUBJECT PERFORMANCE
+        ========================================== */
+
+        .subject-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 15px;
+        }
+
+
+        .subject-card {
+            background: #f8fafc;
+
+            padding: 18px;
+
+            border-radius: 12px;
+
+            border:
+                1px solid #e2e8f0;
+        }
+
+
+        .subject-card h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+
+            font-size: 17px;
+        }
+
+
+        .subject-score {
+            color: #4f46e5;
+
+            font-size: 22px;
+
+            font-weight: 700;
+        }
+
+
+        .subject-card p {
+            margin-bottom: 0;
+
+            color: #64748b;
+        }
+
+
+        /* ==========================================
+           MISTAKES
+        ========================================== */
+
+        .mistake {
+            background: #fff7f7;
+
+            border:
+                1px solid #fecaca;
+
+            padding: 17px;
+
+            border-radius: 10px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .mistake:last-child {
+            margin-bottom: 0;
+        }
+
+
+        .mistake-question {
+            font-weight: 700;
+
+            margin-bottom: 10px;
+
+            line-height: 1.5;
+        }
+
+
+        .mistake-text {
+            color: #b91c1c;
+
+            margin-bottom: 8px;
+
+            line-height: 1.5;
+        }
+
+
+        .suggestion {
+            color: #15803d;
+
+            line-height: 1.5;
+        }
+
+
+        /* ==========================================
+           TABLE
+        ========================================== */
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+
+
+        th,
+        td {
+            padding: 13px;
+
+            text-align: left;
+
+            border-bottom:
+                1px solid #e2e8f0;
+        }
+
+
+        th {
+            background: #f8fafc;
+
+            color: #475569;
+        }
+
+
+        td {
+            color: #334155;
+        }
+
+
+        /* ==========================================
+           BUTTONS
+        ========================================== */
+
+        .button {
+            display: inline-block;
+
+            background: #4f46e5;
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 9px 14px;
+
+            border-radius: 7px;
+
+            font-size: 14px;
+
+            font-weight: 600;
+        }
+
+
+        .button:hover {
+            background: #4338ca;
+        }
+
+
+        .quick-actions {
+            display: flex;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .quick-actions .button {
+            padding: 12px 20px;
+        }
+
+
+        /* ==========================================
+           EMPTY MESSAGE
+        ========================================== */
+
+        .empty {
+            color: #64748b;
+
+            line-height: 1.6;
+        }
+
+
+        /* ==========================================
+           RESPONSIVE
+        ========================================== */
+
+        @media (max-width: 1000px) {
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            .skill-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            .insight-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            .stats,
+            .skill-grid,
+            .subject-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .navbar {
+                padding: 0 18px;
+            }
+
+
+            .container {
+                width: 95%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ==========================================
+         NAVBAR
+    ========================================== -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            AI Interview
+        </div>
+
+
+        <div class="nav-links">
+
+            <a href="/dashboard">
+                Dashboard
+            </a>
+
+            <a href="/logout">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- ==========================================
+         MAIN
+    ========================================== -->
+
+    <main class="container">
+
+
+        <!-- ==========================================
+             PAGE TITLE
+        ========================================== -->
+
+        <div class="page-title">
+
+            <h1>
+                My Performance
+            </h1>
+
+            <p>
+                Review your interview scores,
+                subject strengths, mistakes
+                and improvement areas.
+            </p>
+
+        </div>
+
+
+
+        <!-- ==========================================
+             TOP STATISTICS
+        ========================================== -->
+
+        <div class="stats">
+
+
+            <div class="stat-card">
+
+                <p>
+                    Total Interviews
+                </p>
+
+                <h2>
+                    <%= typeof totalInterviews !== "undefined"
+                        ? totalInterviews
+                        : 0
+                    %>
+                </h2>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <p>
+                    Resume Interviews
+                </p>
+
+                <h2>
+                    <%= typeof resumeInterviews !== "undefined"
+                        ? resumeInterviews
+                        : 0
+                    %>
+                </h2>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <p>
+                    Subject Interviews
+                </p>
+
+                <h2>
+                    <%= typeof subjectInterviews !== "undefined"
+                        ? subjectInterviews
+                        : 0
+                    %>
+                </h2>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <p>
+                    Average Score
+                </p>
+
+                <h2>
+                    <%= Number(
+                        typeof averageScore !== "undefined"
+                            ? averageScore
+                            : 0
+                    ).toFixed(1) %>/10
+                </h2>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <p>
+                    Highest Score
+                </p>
+
+                <h2>
+                    <%= Number(
+                        typeof highestScore !== "undefined"
+                            ? highestScore
+                            : 0
+                    ).toFixed(1) %>/10
+                </h2>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ==========================================
+             SKILL BREAKDOWN
+        ========================================== -->
+
+        <section class="section">
+
+            <h2>
+                Skill Breakdown
+            </h2>
+
+            <p class="description">
+                Average scores calculated from all
+                your evaluated interview answers.
+            </p>
+
+
+            <div class="skill-grid">
+
+
+                <div class="skill">
+
+                    <span>
+                        Relevance
+                    </span>
+
+                    <h3>
+                        <%= categoryScores &&
+                            categoryScores.relevance
+                                ? categoryScores.relevance
+                                : "0.0"
+                        %>/10
+                    </h3>
+
+                </div>
+
+
+                <div class="skill">
+
+                    <span>
+                        Technical
+                    </span>
+
+                    <h3>
+                        <%= categoryScores &&
+                            categoryScores.technical
+                                ? categoryScores.technical
+                                : "0.0"
+                        %>/10
+                    </h3>
+
+                </div>
+
+
+                <div class="skill">
+
+                    <span>
+                        Completeness
+                    </span>
+
+                    <h3>
+                        <%= categoryScores &&
+                            categoryScores.completeness
+                                ? categoryScores.completeness
+                                : "0.0"
+                        %>/10
+                    </h3>
+
+                </div>
+
+
+                <div class="skill">
+
+                    <span>
+                        Clarity
+                    </span>
+
+                    <h3>
+                        <%= categoryScores &&
+                            categoryScores.clarity
+                                ? categoryScores.clarity
+                                : "0.0"
+                        %>/10
+                    </h3>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==========================================
+             PERFORMANCE TREND
+        ========================================== -->
+
+        <section class="section">
+
+            <h2>
+                Performance Trend
+            </h2>
+
+
+            <p class="description">
+                Track how your interview performance changes over time.
+            </p>
+
+
+            <div class="trend-label">
+
+                <%= typeof trendStatus !== "undefined"
+                    ? trendStatus
+                    : "Not enough data"
+                %>
+
+            </div>
+
+
+            <% if (
+                typeof trendScores !== "undefined" &&
+                Array.isArray(trendScores) &&
+                trendScores.length > 0
+            ) { %>
+
+
+                <div class="chart-container">
+
+                    <canvas
+                        id="performanceChart"
+                    ></canvas>
+
+                </div>
+
+
+            <% } else { %>
+
+
+                <p class="empty">
+                    Complete interviews to see your performance graph.
+                </p>
+
+
+            <% } %>
+
+        </section>
+
+
+
+        <!-- ==========================================
+             SUBJECT INSIGHTS
+        ========================================== -->
+
+        <section class="section">
+
+            <h2>
+                Subject Insights
+            </h2>
+
+            <p class="description">
+                Identify your strongest subject,
+                weakest subject and latest performance.
+            </p>
+
+
+            <div class="insight-grid">
+
+
+                <!-- BEST SUBJECT -->
+
+                <div class="insight">
+
+                    <h3>
+                        Best Subject
+                    </h3>
+
+
+                    <% if (
+                        typeof bestSubject !== "undefined" &&
+                        bestSubject
+                    ) { %>
+
+
+                        <strong>
+                            <%= bestSubject.subject || "Unknown Subject" %>
+                        </strong>
+
+
+                        <div class="big-score">
+
+                            <%= Number(
+                                bestSubject.average_score || 0
+                            ).toFixed(1) %>/10
+
+                        </div>
+
+
+                    <% } else { %>
+
+
+                        <p class="empty">
+                            Complete subject interviews first.
+                        </p>
+
+
+                    <% } %>
+
+                </div>
+
+
+
+                <!-- WEAKEST SUBJECT -->
+
+                <div class="insight">
+
+                    <h3>
+                        Needs More Practice
+                    </h3>
+
+
+                    <% if (
+                        typeof weakestSubject !== "undefined" &&
+                        weakestSubject
+                    ) { %>
+
+
+                        <strong>
+                            <%= weakestSubject.subject || "Unknown Subject" %>
+                        </strong>
+
+
+                        <div class="big-score">
+
+                            <%= Number(
+                                weakestSubject.average_score || 0
+                            ).toFixed(1) %>/10
+
+                        </div>
+
+
+                    <% } else { %>
+
+
+                        <p class="empty">
+                            Complete subject interviews first.
+                        </p>
+
+
+                    <% } %>
+
+                </div>
+
+
+
+                <!-- LATEST -->
+
+                <div class="insight">
+
+                    <h3>
+                        Latest Performance
+                    </h3>
+
+
+                    <% if (
+                        typeof latestInterview !== "undefined" &&
+                        latestInterview
+                    ) { %>
+
+
+                        <strong>
+
+                            <%= latestInterview.subject
+                                ? latestInterview.subject
+                                : "Resume Interview"
+                            %>
+
+                        </strong>
+
+
+                        <div class="big-score">
+
+                            <%= Number(
+                                latestInterview.overall_score || 0
+                            ).toFixed(1) %>/10
+
+                        </div>
+
+
+                        <br>
+
+
+                        <a
+                            href="/interview/result/<%= latestInterview.id %>"
+                            class="button"
+                        >
+                            View Latest Result
+                        </a>
+
+
+                    <% } else { %>
+
+
+                        <p class="empty">
+                            No interview completed yet.
+                        </p>
+
+
+                    <% } %>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==========================================
+             SUBJECT-WISE PERFORMANCE
+        ========================================== -->
+
+        <section class="section">
+
+            <h2>
+                Subject-wise Performance
+            </h2>
+
+
+            <p class="description">
+                Average performance for each
+                subject you practiced.
+            </p>
+
+
+            <% if (
+                typeof subjectPerformance !== "undefined" &&
+                Array.isArray(subjectPerformance) &&
+                subjectPerformance.length > 0
+            ) { %>
+
+
+                <div class="subject-grid">
+
+
+                    <% subjectPerformance.forEach(function(item) { %>
+
+
+                        <div class="subject-card">
+
+
+                            <h3>
+
+                                <%= item && item.subject
+                                    ? item.subject
+                                    : "Unknown Subject"
+                                %>
+
+                            </h3>
+
+
+                            <div class="subject-score">
+
+                                <%= Number(
+                                    item &&
+                                    item.average_score !== null &&
+                                    item.average_score !== undefined
+                                        ? item.average_score
+                                        : 0
+                                ).toFixed(1) %>/10
+
+                            </div>
+
+
+                            <p>
+
+                                Completed Interviews:
+
+                                <%= Number(
+                                    item &&
+                                    item.total_interviews !== null &&
+                                    item.total_interviews !== undefined
+                                        ? item.total_interviews
+                                        : 0
+                                ) %>
+
+                            </p>
+
+
+                        </div>
+
+
+                    <% }); %>
+
+
+                </div>
+
+
+            <% } else { %>
+
+
+                <p class="empty">
+                    No subject interview data available yet.
+                </p>
+
+
+            <% } %>
+
+        </section>
+
+
+
+        <!-- ==========================================
+             RECENT MISTAKES
+        ========================================== -->
+
+        <section class="section">
+
+            <h2>
+                Recent Mistakes & Suggestions
+            </h2>
+
+
+            <p class="description">
+                Review mistakes detected in your
+                recently evaluated interviews.
+            </p>
+
+
+            <% if (
+                typeof recentMistakes !== "undefined" &&
+                Array.isArray(recentMistakes) &&
+                recentMistakes.length > 0
+            ) { %>
+
+
+                <% recentMistakes.forEach(function(item) { %>
+
+
+                    <div class="mistake">
+
+
+                        <div class="mistake-question">
+
+                            <%= item && item.question
+                                ? item.question
+                                : "Question unavailable"
+                            %>
+
+                        </div>
+
+
+                        <div class="mistake-text">
+
+                            <strong>
+                                Mistake:
+                            </strong>
+
+                            <%= item && item.mistakes
+                                ? item.mistakes
+                                : "No major mistake."
+                            %>
+
+                        </div>
+
+
+                        <div class="suggestion">
+
+                            <strong>
+                                Suggestion:
+                            </strong>
+
+                            <%= item && item.suggestions
+                                ? item.suggestions
+                                : "Keep practicing."
+                            %>
+
+                        </div>
+
+
+                    </div>
+
+
+                <% }); %>
+
+
+            <% } else { %>
+
+
+                <p class="empty">
+                    No mistakes available yet.
+                </p>
+
+
+            <% } %>
+
+        </section>
+
+
+
+        <!-- ==========================================
+             INTERVIEW HISTORY
+        ========================================== -->
+
+        <section class="section">
+
+            <h2>
+                Interview History
+            </h2>
+
+
+            <p class="description">
+                View your previous interviews
+                and complete scorecards.
+            </p>
+
+
+            <% if (
+                typeof interviews !== "undefined" &&
+                Array.isArray(interviews) &&
+                interviews.length > 0
+            ) { %>
+
+
+                <div class="table-wrapper">
+
+
+                    <table>
+
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Type
+                                </th>
+
+                                <th>
+                                    Subject
+                                </th>
+
+                                <th>
+                                    Level
+                                </th>
+
+                                <th>
+                                    Topic
+                                </th>
+
+                                <th>
+                                    Questions
+                                </th>
+
+                                <th>
+                                    Score
+                                </th>
+
+                                <th>
+                                    Result
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+
+                            <% interviews.forEach(function(item) { %>
+
+
+                                <tr>
+
+
+                                    <td>
+
+                                        <%= item &&
+                                            item.interview_type === "resume"
+                                                ? "Resume"
+                                                : "Subject"
+                                        %>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <%= item &&
+                                            item.subject
+                                                ? item.subject
+                                                : "Resume Based"
+                                        %>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <%= item &&
+                                            item.difficulty
+                                                ? item.difficulty
+                                                : "-"
+                                        %>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <%= item &&
+                                            item.topic
+                                                ? item.topic
+                                                : "-"
+                                        %>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <%= Number(
+                                            item &&
+                                            item.total_questions !== null &&
+                                            item.total_questions !== undefined
+                                                ? item.total_questions
+                                                : 0
+                                        ) %>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <strong>
+
+                                            <%= Number(
+                                                item &&
+                                                item.overall_score !== null &&
+                                                item.overall_score !== undefined
+                                                    ? item.overall_score
+                                                    : 0
+                                            ).toFixed(1) %>/10
+
+                                        </strong>
+
+                                    </td>
+
+
+                                    <td>
+
+
+                                        <% if (
+                                            item &&
+                                            item.id
+                                        ) { %>
+
+
+                                            <a
+                                                href="/interview/result/<%= item.id %>"
+                                                class="button"
+                                            >
+                                                View Result
+                                            </a>
+
+
+                                        <% } else { %>
+
+                                            -
+
+                                        <% } %>
+
+
+                                    </td>
+
+
+                                </tr>
+
+
+                            <% }); %>
+
+
+                        </tbody>
+
+
+                    </table>
+
+
+                </div>
+
+
+            <% } else { %>
+
+
+                <p class="empty">
+                    No completed interviews available yet.
+                </p>
+
+
+            <% } %>
+
+        </section>
+
+
+
+        <!-- ==========================================
+             QUICK ACTIONS
+        ========================================== -->
+
+        <section class="section">
+
+            <h2>
+                Quick Actions
+            </h2>
+
+
+            <p class="description">
+                Continue practicing or return to your dashboard.
+            </p>
+
+
+            <div class="quick-actions">
+
+
+                <a
+                    href="/resume/upload"
+                    class="button"
+                >
+                    Start Resume Interview
+                </a>
+
+
+                <a
+                    href="/interview/subject"
+                    class="button"
+                >
+                    Practice Subject
+                </a>
+
+
+                <% if (
+                    typeof latestInterview !== "undefined" &&
+                    latestInterview &&
+                    latestInterview.id
+                ) { %>
+
+
+                    <a
+                        href="/interview/result/<%= latestInterview.id %>"
+                        class="button"
+                    >
+                        View Latest Scorecard
+                    </a>
+
+
+                <% } %>
+
+
+                <a
+                    href="/dashboard"
+                    class="button"
+                >
+                    Back to Dashboard
+                </a>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- ==========================================
+         SAFE CHART DATA
+    ========================================== -->
+
+    <div
+        id="chartData"
+        style="display:none;"
+        data-labels="<%= encodeURIComponent(
+            JSON.stringify(
+                typeof trendLabels !== 'undefined' &&
+                Array.isArray(trendLabels)
+                    ? trendLabels
+                    : []
+            )
+        ) %>"
+        data-scores="<%= encodeURIComponent(
+            JSON.stringify(
+                typeof trendScores !== 'undefined' &&
+                Array.isArray(trendScores)
+                    ? trendScores
+                    : []
+            )
+        ) %>"
+    ></div>
+
+
+
+    <!-- ==========================================
+         CHART SCRIPT
+    ========================================== -->
+
+    <script>
+
+        const chartDataElement =
+            document.getElementById(
+                "chartData"
+            );
+
+
+        let chartLabels = [];
+        let chartScores = [];
+
+
+        if (
+            chartDataElement
+        ) {
+
+            try {
+
+                chartLabels =
+                    JSON.parse(
+                        decodeURIComponent(
+                            chartDataElement
+                                .dataset
+                                .labels
+                        )
+                    );
+
+
+                chartScores =
+                    JSON.parse(
+                        decodeURIComponent(
+                            chartDataElement
+                                .dataset
+                                .scores
+                        )
+                    );
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Chart data error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        if (
+            Array.isArray(chartScores) &&
+            chartScores.length > 0
+        ) {
+
+            const chartElement =
+                document.getElementById(
+                    "performanceChart"
+                );
+
+
+            if (
+                chartElement &&
+                typeof Chart !== "undefined"
+            ) {
+
+                new Chart(
+
+                    chartElement,
+
+                    {
+
+                        type:
+                            "line",
+
+
+                        data: {
+
+                            labels:
+                                chartLabels,
+
+
+                            datasets: [
+
+                                {
+
+                                    label:
+                                        "Interview Score",
+
+                                    data:
+                                        chartScores,
+
+                                    tension:
+                                        0.3,
+
+                                    fill:
+                                        false
+
+                                }
+
+                            ]
+
+                        },
+
+
+                        options: {
+
+                            responsive:
+                                true,
+
+                            maintainAspectRatio:
+                                false,
+
+
+                            scales: {
+
+                                y: {
+
+                                    beginAtZero:
+                                        true,
+
+                                    min:
+                                        0,
+
+                                    max:
+                                        10,
+
+                                    ticks: {
+
+                                        stepSize:
+                                            1
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                );
+
+            }
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

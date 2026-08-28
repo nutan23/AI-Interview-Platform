@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Resume Analysis | AI Interview</title>
+
+    <link
+        rel="stylesheet"
+        href="/css/style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            AI Interview
+        </div>
+
+        <div>
+
+            <a href="/dashboard">
+                Dashboard
+            </a>
+
+            &nbsp;&nbsp;
+
+            <a href="/resume/upload">
+                Upload New Resume
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- MAIN -->
+
+    <main class="analysis-page">
+
+
+        <div class="analysis-container">
+
+
+            <!-- HEADER -->
+
+            <div class="analysis-header">
+
+                <h1>
+                    Resume Analysis
+                </h1>
+
+                <p>
+                    Your resume has been successfully uploaded
+                    and processed.
+                </p>
+
+            </div>
+
+
+            <!-- RESUME INFORMATION -->
+
+            <div class="resume-details">
+
+                <h2>
+                    Resume Information
+                </h2>
+
+
+                <div class="detail-row">
+
+                    <strong>
+                        File Name:
+                    </strong>
+
+                    <span>
+                        <%= resume.file_name %>
+                    </span>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <strong>
+                        File Type:
+                    </strong>
+
+                    <span>
+                        <%= resume.file_type %>
+                    </span>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <strong>
+                        Uploaded On:
+                    </strong>
+
+                    <span>
+                        <%= new Date(resume.created_at).toLocaleString() %>
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- EXTRACTED TEXT -->
+
+            <div class="resume-text-section">
+
+                <h2>
+                    Extracted Resume Text
+                </h2>
+
+                <p class="section-description">
+
+                    This is the text extracted from your
+                    uploaded resume. In the next phase,
+                    AI will analyze this information.
+
+                </p>
+
+
+                <div class="resume-text">
+
+                    <%= resume.resume_text %>
+
+                </div>
+
+            </div>
+
+
+            <!-- NEXT STEP -->
+
+            <div class="continue-section">
+
+                <h2>
+                    Ready for AI Interview?
+                </h2>
+
+                <p>
+                    Our AI will analyze your resume and
+                    generate personalized interview questions.
+                </p>
+
+
+                <!--<button
+                    type="button"
+                    onclick="startAIInterview()"
+                >
+                    Continue to AI Interview
+                </button>-->
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+    <script>
+
+        function startAIInterview() {
+
+            alert(
+                "AI Interview module will be available in Phase 4."
+            );
+
+        }
+
+    </script>
+    <div style="text-align: center; margin-top: 30px;">
+
+    <a
+        href="/interview/setup/<%= resume.id %>"
+        style="
+            display: inline-block;
+            padding: 14px 28px;
+            background: #4f46e5;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        "
+    >
+        Start AI Interview
+    </a>
+
+</div>
+
+
+</body>
+
+</html>

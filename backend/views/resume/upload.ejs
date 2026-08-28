@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Upload Resume | AI Interview</title>
+
+    <link
+        rel="stylesheet"
+        href="/css/style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <nav class="navbar">
+
+        <div class="logo">
+            AI Interview
+        </div>
+
+        <a href="/dashboard">
+            Dashboard
+        </a>
+
+    </nav>
+
+
+    <main class="resume-page">
+
+
+        <div class="resume-card">
+
+
+            <h1>
+                Upload Your Resume
+            </h1>
+
+
+            <p class="subtitle">
+
+                Upload your resume and let our AI
+                prepare personalized interview questions.
+
+            </p>
+
+
+            <% if (error) { %>
+
+                <div class="error-message">
+
+                    <%= error %>
+
+                </div>
+
+            <% } %>
+
+
+            <form
+                action="/resume/upload"
+                method="POST"
+                enctype="multipart/form-data"
+            >
+
+
+                <div class="upload-area">
+
+
+                    <div class="upload-icon">
+                        📄
+                    </div>
+
+
+                    <h2>
+                        Select Your Resume
+                    </h2>
+
+
+                    <p>
+                        PDF or DOCX only
+                    </p>
+
+
+                    <input
+                        type="file"
+                        name="resume"
+                        accept=".pdf,.docx"
+                        required
+                    >
+
+                </div>
+
+
+                <button type="submit">
+
+                    Upload & Analyze
+
+                </button>
+
+
+            </form>
+
+
+            <div class="resume-info">
+
+                <p>
+                    Maximum file size: 5 MB
+                </p>
+
+                <p>
+                    Supported formats: PDF, DOCX
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+</body>
+
+</html>

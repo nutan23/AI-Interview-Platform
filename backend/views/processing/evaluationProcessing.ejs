@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>AI Interview | Evaluating</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                Arial,
+                sans-serif;
+
+            background:
+                #f4f6ff;
+
+            color:
+                #1e293b;
+
+        }
+
+
+        /* ==========================================
+           NAVBAR
+        ========================================== */
+
+        .navbar {
+
+            height: 70px;
+
+            background:
+                white;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            padding:
+                0 40px;
+
+            box-shadow:
+                0 2px 10px
+                rgba(0, 0, 0, 0.07);
+
+        }
+
+
+        .logo {
+
+            font-size:
+                23px;
+
+            font-weight:
+                700;
+
+            color:
+                #4f46e5;
+
+        }
+
+
+        .navbar-text {
+
+            font-size:
+                14px;
+
+            color:
+                #64748b;
+
+        }
+
+
+        /* ==========================================
+           MAIN
+        ========================================== */
+
+        .main {
+
+            min-height:
+                calc(100vh - 70px);
+
+            display:
+                flex;
+
+            justify-content:
+                center;
+
+            align-items:
+                center;
+
+            padding:
+                40px 20px;
+
+        }
+
+
+        /* ==========================================
+           CARD
+        ========================================== */
+
+        .evaluation-card {
+
+            width:
+                650px;
+
+            max-width:
+                100%;
+
+            background:
+                white;
+
+            border-radius:
+                22px;
+
+            padding:
+                45px;
+
+            text-align:
+                center;
+
+            box-shadow:
+                0 12px 40px
+                rgba(0, 0, 0, 0.08);
+
+        }
+
+
+        /* ==========================================
+           AI ICON
+        ========================================== */
+
+        .ai-icon {
+
+            width:
+                80px;
+
+            height:
+                80px;
+
+            margin:
+                0 auto 25px;
+
+            border-radius:
+                50%;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            background:
+                #eef2ff;
+
+            color:
+                #4f46e5;
+
+            font-size:
+                32px;
+
+            font-weight:
+                bold;
+
+        }
+
+
+        /* ==========================================
+           TITLE
+        ========================================== */
+
+        .evaluation-card h1 {
+
+            font-size:
+                30px;
+
+            margin-bottom:
+                12px;
+
+            color:
+                #172033;
+
+        }
+
+
+        .subtitle {
+
+            font-size:
+                16px;
+
+            line-height:
+                1.6;
+
+            color:
+                #64748b;
+
+            margin-bottom:
+                30px;
+
+        }
+
+
+        /* ==========================================
+           LOADER
+        ========================================== */
+
+        .loader {
+
+            width:
+                58px;
+
+            height:
+                58px;
+
+            margin:
+                25px auto;
+
+            border:
+                6px solid
+                #e2e8f0;
+
+            border-top-color:
+                #4f46e5;
+
+            border-radius:
+                50%;
+
+            animation:
+                spin
+                0.9s
+                linear
+                infinite;
+
+        }
+
+
+        @keyframes spin {
+
+            from {
+                transform:
+                    rotate(0deg);
+            }
+
+            to {
+                transform:
+                    rotate(360deg);
+            }
+
+        }
+
+
+        /* ==========================================
+           QUESTION COUNT
+        ========================================== */
+
+        .evaluation-count {
+
+            margin:
+                10px 0 25px;
+
+            font-size:
+                18px;
+
+            font-weight:
+                700;
+
+            color:
+                #4f46e5;
+
+        }
+
+
+        /* ==========================================
+           PROGRESS
+        ========================================== */
+
+        .progress-section {
+
+            margin-top:
+                20px;
+
+            text-align:
+                left;
+
+        }
+
+
+        .progress-info {
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            margin-bottom:
+                10px;
+
+            font-size:
+                14px;
+
+            color:
+                #64748b;
+
+        }
+
+
+        #progressText {
+
+            color:
+                #4f46e5;
+
+            font-weight:
+                700;
+
+        }
+
+
+        .progress-bar {
+
+            width:
+                100%;
+
+            height:
+                12px;
+
+            background:
+                #e2e8f0;
+
+            border-radius:
+                20px;
+
+            overflow:
+                hidden;
+
+        }
+
+
+        .progress-fill {
+
+            width:
+                0%;
+
+            height:
+                100%;
+
+            background:
+                #4f46e5;
+
+            border-radius:
+                20px;
+
+            transition:
+                width
+                0.5s
+                ease;
+
+        }
+
+
+        /* ==========================================
+           STEPS
+        ========================================== */
+
+        .steps {
+
+            margin-top:
+                30px;
+
+            text-align:
+                left;
+
+            border:
+                1px solid
+                #e2e8f0;
+
+            border-radius:
+                14px;
+
+            overflow:
+                hidden;
+
+        }
+
+
+        .step {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                14px;
+
+            padding:
+                15px 18px;
+
+            border-bottom:
+                1px solid
+                #e2e8f0;
+
+            font-size:
+                15px;
+
+            color:
+                #64748b;
+
+        }
+
+
+        .step:last-child {
+            border-bottom:
+                none;
+        }
+
+
+        .step-icon {
+
+            width:
+                28px;
+
+            height:
+                28px;
+
+            flex-shrink:
+                0;
+
+            border-radius:
+                50%;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            background:
+                #f1f5f9;
+
+            font-size:
+                13px;
+
+            font-weight:
+                700;
+
+            color:
+                #94a3b8;
+
+        }
+
+
+        .step.active {
+
+            color:
+                #4f46e5;
+
+            font-weight:
+                600;
+
+            background:
+                #fafaff;
+
+        }
+
+
+        .step.active .step-icon {
+
+            background:
+                #4f46e5;
+
+            color:
+                white;
+
+            animation:
+                pulse
+                1s
+                infinite;
+
+        }
+
+
+        .step.completed {
+
+            color:
+                #15803d;
+
+        }
+
+
+        .step.completed .step-icon {
+
+            background:
+                #dcfce7;
+
+            color:
+                #15803d;
+
+        }
+
+
+        @keyframes pulse {
+
+            0% {
+                transform:
+                    scale(1);
+            }
+
+            50% {
+                transform:
+                    scale(1.12);
+            }
+
+            100% {
+                transform:
+                    scale(1);
+            }
+
+        }
+
+
+        /* ==========================================
+           INTERVIEW INFO
+        ========================================== */
+
+        .interview-info {
+
+            margin-top:
+                25px;
+
+            padding:
+                15px;
+
+            border-radius:
+                10px;
+
+            background:
+                #eef2ff;
+
+            color:
+                #4338ca;
+
+            font-size:
+                14px;
+
+            line-height:
+                1.7;
+
+        }
+
+
+        /* ==========================================
+           WAIT MESSAGE
+        ========================================== */
+
+        .wait-message {
+
+            margin-top:
+                25px;
+
+            color:
+                #64748b;
+
+            font-size:
+                14px;
+
+            line-height:
+                1.6;
+
+        }
+
+
+        /* ==========================================
+           ERROR
+        ========================================== */
+
+        .error-box {
+
+            display:
+                none;
+
+            margin-top:
+                25px;
+
+            padding:
+                18px;
+
+            background:
+                #fef2f2;
+
+            border:
+                1px solid
+                #fecaca;
+
+            border-radius:
+                10px;
+
+            color:
+                #b91c1c;
+
+            text-align:
+                left;
+
+        }
+
+
+        .error-title {
+
+            font-weight:
+                700;
+
+            margin-bottom:
+                8px;
+
+        }
+
+
+        .retry-button {
+
+            display:
+                none;
+
+            margin:
+                20px auto 0;
+
+            padding:
+                12px 25px;
+
+            border:
+                none;
+
+            border-radius:
+                8px;
+
+            background:
+                #4f46e5;
+
+            color:
+                white;
+
+            font-size:
+                15px;
+
+            font-weight:
+                600;
+
+            cursor:
+                pointer;
+
+        }
+
+
+        .retry-button:hover {
+
+            background:
+                #4338ca;
+
+        }
+
+
+        /* ==========================================
+           RESPONSIVE
+        ========================================== */
+
+        @media (
+            max-width: 650px
+        ) {
+
+            .navbar {
+
+                padding:
+                    0 18px;
+
+            }
+
+
+            .evaluation-card {
+
+                padding:
+                    30px 20px;
+
+            }
+
+
+            .evaluation-card h1 {
+
+                font-size:
+                    25px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ==========================================
+         NAVBAR
+    ========================================== -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            AI Interview
+        </div>
+
+        <div class="navbar-text">
+            AI-Powered Evaluation
+        </div>
+
+    </nav>
+
+
+
+    <!-- ==========================================
+         MAIN
+    ========================================== -->
+
+    <main class="main">
+
+
+        <div class="evaluation-card">
+
+
+            <!-- ==========================================
+                 ICON
+            ========================================== -->
+
+            <div
+                class="ai-icon"
+                id="aiIcon"
+            >
+                AI
+            </div>
+
+
+
+            <!-- ==========================================
+                 TITLE
+            ========================================== -->
+
+            <h1 id="mainTitle">
+                Evaluating Your Interview
+            </h1>
+
+
+            <p class="subtitle" id="subtitle">
+
+                Your answers have been submitted successfully.
+
+                <br>
+
+                AI is completing the remaining answer evaluations.
+
+            </p>
+
+
+
+            <!-- ==========================================
+                 LOADER
+            ========================================== -->
+
+            <div
+                class="loader"
+                id="loader"
+            ></div>
+
+
+
+            <!-- ==========================================
+                 ACTUAL COUNT
+            ========================================== -->
+
+            <div
+                class="evaluation-count"
+                id="evaluationCount"
+            >
+
+                Checking evaluation progress...
+
+            </div>
+
+
+
+            <!-- ==========================================
+                 PROGRESS
+            ========================================== -->
+
+            <div class="progress-section">
+
+
+                <div class="progress-info">
+
+                    <span id="statusText">
+                        Checking evaluated answers...
+                    </span>
+
+
+                    <span id="progressText">
+                        0%
+                    </span>
+
+                </div>
+
+
+                <div class="progress-bar">
+
+                    <div
+                        class="progress-fill"
+                        id="progressFill"
+                    ></div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ==========================================
+                 STEPS
+            ========================================== -->
+
+            <div class="steps">
+
+
+                <div
+                    class="step completed"
+                    id="step1"
+                >
+
+                    <div class="step-icon">
+                        ✓
+                    </div>
+
+                    <div>
+                        All interview answers submitted
+                    </div>
+
+                </div>
+
+
+
+                <div
+                    class="step active"
+                    id="step2"
+                >
+
+                    <div class="step-icon">
+                        2
+                    </div>
+
+                    <div>
+                        Background AI evaluation in progress
+                    </div>
+
+                </div>
+
+
+
+                <div
+                    class="step"
+                    id="step3"
+                >
+
+                    <div class="step-icon">
+                        3
+                    </div>
+
+                    <div>
+                        Checking question-wise scores
+                    </div>
+
+                </div>
+
+
+
+                <div
+                    class="step"
+                    id="step4"
+                >
+
+                    <div class="step-icon">
+                        4
+                    </div>
+
+                    <div>
+                        Calculating final average score
+                    </div>
+
+                </div>
+
+
+
+                <div
+                    class="step"
+                    id="step5"
+                >
+
+                    <div class="step-icon">
+                        5
+                    </div>
+
+                    <div>
+                        Preparing final scorecard
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ==========================================
+                 INTERVIEW INFORMATION
+            ========================================== -->
+
+            <div class="interview-info">
+
+                Interview ID:
+
+                <strong>
+                    <%= interviewId %>
+                </strong>
+
+                <br>
+
+                Total Questions:
+
+                <strong>
+                    <%= totalQuestions %>
+                </strong>
+
+            </div>
+
+
+
+            <!-- ==========================================
+                 WAIT MESSAGE
+            ========================================== -->
+
+            <p
+                class="wait-message"
+                id="waitMessage"
+            >
+
+                You can wait here while the remaining answers are evaluated.
+
+                <br>
+
+                Your scorecard will open automatically when evaluation finishes.
+
+            </p>
+
+
+
+            <!-- ==========================================
+                 ERROR
+            ========================================== -->
+
+            <div
+                class="error-box"
+                id="errorBox"
+            >
+
+                <div class="error-title">
+                    Evaluation Failed
+                </div>
+
+                <div id="errorMessage">
+                    Something went wrong.
+                </div>
+
+            </div>
+
+
+
+            <!-- ==========================================
+                 RETRY
+            ========================================== -->
+
+            <button
+                type="button"
+                class="retry-button"
+                id="retryButton"
+                onclick="retryEvaluation()"
+            >
+
+                Try Again
+
+            </button>
+
+
+        </div>
+
+
+    </main>
+
+
+
+    <script>
+
+
+        // ==========================================
+        // INTERVIEW DATA
+        // ==========================================
+
+        const interviewId =
+            Number(
+                "<%= interviewId %>"
+            );
+
+
+        const totalQuestions =
+            Number(
+                "<%= totalQuestions %>"
+            );
+
+
+
+        // ==========================================
+        // ELEMENTS
+        // ==========================================
+
+        const progressFill =
+            document.getElementById(
+                "progressFill"
+            );
+
+
+        const progressText =
+            document.getElementById(
+                "progressText"
+            );
+
+
+        const statusText =
+            document.getElementById(
+                "statusText"
+            );
+
+
+        const evaluationCount =
+            document.getElementById(
+                "evaluationCount"
+            );
+
+
+        const loader =
+            document.getElementById(
+                "loader"
+            );
+
+
+        const errorBox =
+            document.getElementById(
+                "errorBox"
+            );
+
+
+        const errorMessage =
+            document.getElementById(
+                "errorMessage"
+            );
+
+
+        const retryButton =
+            document.getElementById(
+                "retryButton"
+            );
+
+
+        const waitMessage =
+            document.getElementById(
+                "waitMessage"
+            );
+
+
+        const mainTitle =
+            document.getElementById(
+                "mainTitle"
+            );
+
+
+        const subtitle =
+            document.getElementById(
+                "subtitle"
+            );
+
+
+        const aiIcon =
+            document.getElementById(
+                "aiIcon"
+            );
+
+
+
+        // ==========================================
+        // POLLING VARIABLES
+        // ==========================================
+
+        let pollingTimer =
+            null;
+
+
+        let requestRunning =
+            false;
+
+
+
+        // ==========================================
+        // UPDATE PROGRESS
+        // ==========================================
+
+        function updateProgress(
+            value,
+            message
+        ) {
+
+            let safeValue =
+                Number(
+                    value || 0
+                );
+
+
+            if (
+                safeValue < 0
+            ) {
+
+                safeValue = 0;
+
+            }
+
+
+            if (
+                safeValue > 100
+            ) {
+
+                safeValue = 100;
+
+            }
+
+
+            progressFill.style.width =
+                safeValue + "%";
+
+
+            progressText.innerText =
+                safeValue + "%";
+
+
+            statusText.innerText =
+                message;
+
+        }
+
+
+
+        // ==========================================
+        // SET ACTIVE STEP
+        // ==========================================
+
+        function setActiveStep(
+            stepNumber
+        ) {
+
+            for (
+                let i = 1;
+                i <= 5;
+                i++
+            ) {
+
+                const step =
+                    document.getElementById(
+                        "step" + i
+                    );
+
+
+                const icon =
+                    step.querySelector(
+                        ".step-icon"
+                    );
+
+
+                step.classList.remove(
+                    "active"
+                );
+
+
+                if (
+                    i < stepNumber
+                ) {
+
+                    step.classList.add(
+                        "completed"
+                    );
+
+
+                    icon.innerText =
+                        "✓";
+
+                }
+
+                else if (
+                    i === stepNumber
+                ) {
+
+                    step.classList.remove(
+                        "completed"
+                    );
+
+
+                    step.classList.add(
+                        "active"
+                    );
+
+
+                    icon.innerText =
+                        i;
+
+                }
+
+                else {
+
+                    step.classList.remove(
+                        "completed"
+                    );
+
+
+                    icon.innerText =
+                        i;
+
+                }
+
+            }
+
+        }
+
+
+
+        // ==========================================
+        // COMPLETE ALL STEPS
+        // ==========================================
+
+        function completeAllSteps() {
+
+            for (
+                let i = 1;
+                i <= 5;
+                i++
+            ) {
+
+                const step =
+                    document.getElementById(
+                        "step" + i
+                    );
+
+
+                const icon =
+                    step.querySelector(
+                        ".step-icon"
+                    );
+
+
+                step.classList.remove(
+                    "active"
+                );
+
+
+                step.classList.add(
+                    "completed"
+                );
+
+
+                icon.innerText =
+                    "✓";
+
+            }
+
+        }
+
+
+
+        // ==========================================
+        // STOP POLLING
+        // ==========================================
+
+        function stopPolling() {
+
+            if (
+                pollingTimer
+            ) {
+
+                clearTimeout(
+                    pollingTimer
+                );
+
+
+                pollingTimer =
+                    null;
+
+            }
+
+        }
+
+
+
+        // ==========================================
+        // SHOW ERROR
+        // ==========================================
+
+        function showError(
+            message
+        ) {
+
+            stopPolling();
+
+
+            loader.style.display =
+                "none";
+
+
+            waitMessage.style.display =
+                "none";
+
+
+            errorMessage.innerText =
+                message ||
+                "Something went wrong while checking evaluation.";
+
+
+            errorBox.style.display =
+                "block";
+
+
+            retryButton.style.display =
+                "block";
+
+
+            statusText.innerText =
+                "Evaluation could not continue";
+
+        }
+
+
+
+        // ==========================================
+        // CHECK BACKGROUND EVALUATION
+        // ==========================================
+
+        async function checkEvaluation() {
+
+            // Prevent two requests at same time.
+
+            if (
+                requestRunning
+            ) {
+
+                return;
+
+            }
+
+
+            requestRunning =
+                true;
+
+
+            try {
+
+                const response =
+                    await fetch(
+
+                        `/interview/evaluate/${interviewId}`,
+
+                        {
+
+                            method:
+                                "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json"
+
+                            }
+
+                        }
+
+                    );
+
+
+                let data;
+
+
+                try {
+
+                    data =
+                        await response.json();
+
+                }
+
+                catch (jsonError) {
+
+                    throw new Error(
+                        "Server returned an invalid response."
+                    );
+
+                }
+
+
+                if (
+                    !response.ok ||
+                    !data.success
+                ) {
+
+                    throw new Error(
+
+                        data.message ||
+                        "Unable to check evaluation progress."
+
+                    );
+
+                }
+
+
+                // ==========================================
+                // READ REAL BACKEND VALUES
+                // ==========================================
+
+                const evaluated =
+                    Number(
+                        data.evaluated || 0
+                    );
+
+
+                const total =
+                    Number(
+                        data.total ||
+                        totalQuestions ||
+                        0
+                    );
+
+
+                const progress =
+                    Number(
+                        data.progress || 0
+                    );
+
+
+                // ==========================================
+                // UPDATE REAL COUNT
+                // ==========================================
+
+                evaluationCount.innerText =
+                    `${evaluated} / ${total} answers evaluated`;
+
+
+                // ==========================================
+                // COMPLETE
+                // ==========================================
+
+                if (
+                    data.completed === true
+                ) {
+
+                    stopPolling();
+
+
+                    completeAllSteps();
+
+
+                    updateProgress(
+                        100,
+                        "Evaluation completed successfully!"
+                    );
+
+
+                    evaluationCount.innerText =
+                        `${total} / ${total} answers evaluated`;
+
+
+                    loader.style.display =
+                        "none";
+
+
+                    aiIcon.innerText =
+                        "✓";
+
+
+                    mainTitle.innerText =
+                        "Evaluation Complete";
+
+
+                    subtitle.innerHTML =
+                        "All answers have been evaluated successfully.<br>" +
+                        "Your final interview scorecard is ready.";
+
+
+                    waitMessage.innerHTML =
+                        "Opening your scorecard...";
+
+
+                    setTimeout(
+
+                        function () {
+
+                            window.location.href =
+                                data.redirectUrl ||
+                                `/interview/result/${interviewId}`;
+
+                        },
+
+                        1000
+
+                    );
+
+
+                    return;
+
+                }
+
+
+                // ==========================================
+                // STILL EVALUATING
+                // ==========================================
+
+                setActiveStep(
+                    2
+                );
+
+
+                updateProgress(
+
+                    progress,
+
+                    evaluated > 0
+
+                        ? `AI evaluated ${evaluated} of ${total} answers...`
+
+                        : "AI is evaluating your answers..."
+
+                );
+
+
+                waitMessage.innerHTML =
+
+                    "Evaluation is running in the background.<br>" +
+
+                    "Your scorecard will open automatically when all answers are ready.";
+
+
+                // ==========================================
+                // CHECK AGAIN AFTER 1.5 SECONDS
+                // ==========================================
+
+                stopPolling();
+
+
+                pollingTimer =
+                    setTimeout(
+
+                        checkEvaluation,
+
+                        1500
+
+                    );
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Evaluation Status Error:",
+                    error
+                );
+
+
+                showError(
+                    error.message
+                );
+
+            }
+
+            finally {
+
+                requestRunning =
+                    false;
+
+            }
+
+        }
+
+
+
+        // ==========================================
+        // RETRY
+        // ==========================================
+
+        function retryEvaluation() {
+
+            stopPolling();
+
+
+            errorBox.style.display =
+                "none";
+
+
+            retryButton.style.display =
+                "none";
+
+
+            loader.style.display =
+                "block";
+
+
+            waitMessage.style.display =
+                "block";
+
+
+            evaluationCount.innerText =
+                "Checking evaluation progress...";
+
+
+            setActiveStep(
+                2
+            );
+
+
+            checkEvaluation();
+
+        }
+
+
+
+        // ==========================================
+        // START AUTOMATICALLY
+        // ==========================================
+
+        window.addEventListener(
+
+            "load",
+
+            function () {
+
+                updateProgress(
+                    0,
+                    "Checking evaluated answers..."
+                );
+
+
+                checkEvaluation();
+
+            }
+
+        );
+
+
+    </script>
+
+
+</body>
+
+</html>
