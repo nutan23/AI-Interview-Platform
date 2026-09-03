@@ -1,6 +1,6 @@
 const {
     generateAI
-} = require("./ollamaService");
+} = require("./groqService");
 
 
 // ==========================================
