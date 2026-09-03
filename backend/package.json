@@ -78,6 +78,7 @@
     "multer": "^2.2.0",
     "mysql2": "^3.23.3",
     "named-placeholders": "^1.1.6",
+    "natural": "^8.1.1",
     "negotiator": "^1.0.0",
     "node-addon-api": "^8.9.2",
     "node-gyp-build": "^4.8.4",
