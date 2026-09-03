@@ -1,9 +1,20 @@
+const dns = require("dns");
 const mysql = require("mysql2");
 
 
 // ==========================================
+// PREFER IPV4
+// ==========================================
+//
+// Some cloud environments may try IPv6 first.
+// TiDB public endpoint works reliably over IPv4.
+//
+dns.setDefaultResultOrder("ipv4first");
+
+
+// ==========================================
 // DATABASE CONFIGURATION
-// LOCAL XAMPP + AIVEN PRODUCTION
+// LOCAL MYSQL + TIDB CLOUD
 // ==========================================
 
 const dbConfig = {
@@ -29,16 +40,30 @@ const dbConfig = {
         process.env.DB_NAME ||
         "ai_interview",
 
-    // Keep connection alive
-    enableKeepAlive: true,
 
-    keepAliveInitialDelay: 0
+    // ==========================================
+    // CONNECTION TIMEOUT
+    // ==========================================
+
+    connectTimeout:
+        30000,
+
+
+    // ==========================================
+    // KEEP CONNECTION ALIVE
+    // ==========================================
+
+    enableKeepAlive:
+        true,
+
+    keepAliveInitialDelay:
+        0
 
 };
 
 
 // ==========================================
-// ENABLE SSL ONLY FOR PRODUCTION DATABASE
+// SSL FOR CLOUD DATABASE
 // ==========================================
 
 if (
@@ -48,14 +73,17 @@ if (
 ) {
 
     dbConfig.ssl = {
-        rejectUnauthorized: false
+
+        rejectUnauthorized:
+            false
+
     };
 
 }
 
 
 // ==========================================
-// CREATE MYSQL CONNECTION
+// CREATE CONNECTION
 // ==========================================
 
 const db =
@@ -65,19 +93,36 @@ const db =
 
 
 // ==========================================
-// CONNECT TO DATABASE
+// CONNECT
 // ==========================================
 
 db.connect(
     (err) => {
 
-        if (
-            err
-        ) {
+        if (err) {
 
             console.error(
-                "❌ MySQL connection failed:",
+                "❌ MySQL connection failed:"
+            );
+
+            console.error(
+                "Code:",
+                err.code
+            );
+
+            console.error(
+                "Message:",
                 err.message
+            );
+
+            console.error(
+                "Host:",
+                process.env.DB_HOST
+            );
+
+            console.error(
+                "Port:",
+                process.env.DB_PORT
             );
 
             return;
@@ -89,12 +134,17 @@ db.connect(
             "✅ MySQL connected successfully!"
         );
 
+        console.log(
+            "✅ Database:",
+            process.env.DB_NAME || "ai_interview"
+        );
+
     }
 );
 
 
 // ==========================================
-// HANDLE DATABASE ERRORS
+// DATABASE ERROR HANDLER
 // ==========================================
 
 db.on(
@@ -102,7 +152,16 @@ db.on(
     (err) => {
 
         console.error(
-            "MySQL connection error:",
+            "❌ MySQL connection error:"
+        );
+
+        console.error(
+            "Code:",
+            err.code
+        );
+
+        console.error(
+            "Message:",
             err.message
         );
 
@@ -114,5 +173,4 @@ db.on(
 // EXPORT
 // ==========================================
 
-module.exports =
-    db;
+module.exports = db;
